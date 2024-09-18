@@ -1,6 +1,6 @@
 # Development Factory
 
-Welcome to the Dev Factory project! 
+Welcome to the Dev Factory project!
 
 ## Introduction
 
@@ -12,8 +12,9 @@ The initial north star for this project is to build a development factory repres
 ![DevFactory](docs/images/devfactoryv1.png)
 
 The initial variations are:
+
 1. Private environment.
-2. Private environment hardened with private endpoints. 
+2. Private environment hardened with private endpoints.
 
 ## Components
 
@@ -38,11 +39,12 @@ The dev factory automates the setup the following components:
 ## Getting Started
 
 To get started with the DevFactory project, follow these steps:
+
 1. Clone this repository to your local machine, or Click on "Open in Codespace"
 2. Login to your Azure Subscription using ```az login```
 3. Login to your GitHub Enterprise environment
 4. Customize the variables in ```example.tfvars```
-5. Run `terraform plan` to preview the changes that will be applied.
+5. Run ```terraform plan``` to preview the changes that will be applied.
 
 
 ## Contributing
