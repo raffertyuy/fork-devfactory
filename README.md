@@ -1,14 +1,51 @@
-# Project
+# Development Factory
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+Welcome to the Dev Factory project!
 
-As the maintainer of this project, please make a few updates:
+## Introduction
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+The Development Factory project is designed to streamline the setup and configuration of a modern development environment built on GitHub Enterprise.
+This project leverages multiple techniques orchestrated with Terraform to automate the provisioning of various components.
+
+The initial north star for this project is to build a development factory represented in the following architecture diagram:
+
+![DevFactory](docs/images/devfactoryv1.png)
+
+The initial variations are:
+
+1. Private environment.
+2. Private environment hardened with private endpoints.
+
+## Components
+
+The dev factory automates the setup the following components:
+
+### Control plane
+
+- GitHub Enterprise Automation (organizations parameters, actions settings, etc.)
+- GitHub Hosted Compute Networking
+- Azure Kubernetes Services for GitHub Runners with Actions Runner Controller
+- Azure Container Registry
+- Azure DevBox
+
+### AI foundations (roadmap)
+
+- Azure Application Gateway
+- Azure Container Apps
+- Azure Container Registry
+- Azure Kubernetes Services
+- Azure Cognitive Services
+
+## Getting Started
+
+To get started with the DevFactory project, follow these steps:
+
+1. Clone this repository to your local machine, or Click on "Open in Codespace"
+2. Login to your Azure Subscription using ```az login```
+3. Login to your GitHub Enterprise environment
+4. Customize the variables in ```example.tfvars```
+5. Run ```terraform plan``` to preview the changes that will be applied.
+
 
 ## Contributing
 
