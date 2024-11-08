@@ -4,7 +4,7 @@ Welcome to the Dev Factory project!
 
 ## Introduction
 
-The Development Factory project is designed to streamline the setup and configuration of a modern development environment build on GitHub Enterprise. 
+The Development Factory project is designed to streamline the setup and configuration of a modern development environment built on GitHub Enterprise.
 This project leverages multiple techniques orchestrated with Terraform to automate the provisioning of various components.
 
 The initial north star for this project is to build a development factory represented in the following architecture diagram:
