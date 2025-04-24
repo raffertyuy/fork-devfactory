@@ -1,135 +1,259 @@
-## Devfactory project 
+# Devfactory Project - Terraform Implementation Guidelines
 
-- This project deploys dev factory environment using Terraform.
-- We use azurerm provider 4.26.
-- Never create a side test file, always use the root as entry point and the variables to create different resources.
+## Quick Reference Summary
+
+- **Provider:** AzureRM v4.26 only
+- **Run Location:** Always from project root
+- **Sensitive Data:** Never hardcode credentials or subscription IDs
+- **Module Verification:** Always check resource arguments against latest provider docs
+- **Variable Typing:** Use strong types, descriptions, and constraints
+- **Examples:** Every resource/module must have an example in `/examples/`
+- **Validation:** Run `terraform fmt` and `terraform validate` before commit
+
+---
+
+## DO
+- Use only AzureRM provider version 4.26
+- Place all resource modules in `/modules/` and examples in `/examples/`
+- Use dynamic blocks for optional/flexible config
+- Use nested maps and strongly-typed objects for variables
+- Use `locals` for preprocessing and complex parameter objects
+- Use `try()` for error handling and parameter fallbacks
+- Merge tags (resource-specific + global)
+- Use `azurecaf_name` for naming conventions
+- Add input validation in `variables.tf`
+- Add a working example for every resource/module
+- Update module README.md with usage and examples
+- Reference provider docs for every resource: https://registry.terraform.io/providers/hashicorp/azurerm/4.26.0/docs/resources/<resource>
+
+## DO NOT
+- Do not embed subscription IDs or credentials in code/config
+- Do not use untyped or weakly-typed variables
+- Do not skip example creation for new/changed resources
+- Do not commit without running `terraform fmt` and `terraform validate`
+- Do not use provider versions other than 4.26
+
+---
 
 ## Repository Structure
-You run the logic from the root, and passing different variables files will invoke and create different resources.
-- `/modules/`: Contains all resource-specific modules (storage, networking, compute, etc.)
-- `/examples/`: Contains example implementations and configurations for each of the module implemented
-- `/documentation/`: Contains project documentation and conventions
+- `/modules/`: Resource-specific modules (storage, networking, compute, etc.)
+- `/examples/`: Example implementations/configurations for each module
+- `/docs/`: Project documentation and conventions
+
+---
 
 ## Key Module Patterns
-1. **Module Organization**: Each Azure resource type has its own module folder
-2. **Dynamic Blocks**: Extensive use of dynamic blocks for optional configurations
-3. **Input Variable Structure**: Follows a nested map with complext object structure for input variables
+- Each Azure resource type in its own module folder
+- Use dynamic blocks for optional/flexible config
+- Input variables: nested maps, strongly-typed objects
+
+---
 
 ## Code Conventions
-- Each resource module uses a standard pattern with `module.tf`, `variables.tf`, and `output.tf`
-- Modules follow a common pattern with locals for preprocessing and resource blocks
-- Resources use the `try()` function for handling optional parameters with defaults
-- Tags are consistently merged using a combination of resource-specific and global tags
+- Each module: `module.tf`, `variables.tf`, `output.tf`
+- Use `locals` for preprocessing/complex objects
+- Use `try()` for optional/defaulted params
+- Merge tags (resource + global)
+- Use `azurecaf_name` for naming
+
+---
 
 ## Common Patterns
-1. **Resource Creation**:
-   ```hcl
-   resource "azurecaf_name" "name" {
-     name          = var.name
-     resource_type = "azurerm_resource_type"
-     prefixes      = var.global_settings.prefixes
-     random_length = var.global_settings.random_length
-     clean_input   = true
-     passthrough   = var.global_settings.passthrough
-     use_slug      = var.global_settings.use_slug
-   }
-   
-   resource "azurerm_resource" "resource" {
-     name                = azurecaf_name.name.result
-     location            = var.location
-     resource_group_name = var.resource_group_name
-     tags                = local.tags
-     # Resource-specific properties
-   }
-   ```
 
-2. **Variable Structure**:
-Try to do strong object typing as much as possible. 
-   ```hcl
-   variable "resource" {
-     description = "Configuration object for the resource"
-   }
-   
-   variable "global_settings" {
-     description = "Global settings object"
-   }
-   ```
-
-3. **Module Integration**:
-   ```hcl
-   module "resource" {
-     source   = "./resource"
-     for_each = try(var.settings.resources, {})
-     
-     global_settings     = var.global_settings
-     settings            = each.value
-     resource_group_name = var.resource_group_name
-     # Other parameters
-   }
-   ```
-
-4. **Add examples for testing and usability**:
-For each feature you create, add an example with its name under /examples/_feature_name/simple_case to consume the variables like: 
-
+**Resource Creation:**
 ```hcl
-resource_groups = {
-  rg1 = {
-    name   = "example-agw"
-    region = "region1"
+resource "azurecaf_name" "name" {
+  name          = var.name
+  resource_type = "azurerm_resource_type"
+  prefixes      = var.global_settings.prefixes
+  random_length = var.global_settings.random_length
+  clean_input   = true
+  passthrough   = var.global_settings.passthrough
+  use_slug      = var.global_settings.use_slug
+}
+
+resource "azurerm_resource" "resource" {
+  name                = azurecaf_name.name.result
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  tags                = local.tags
+  # Resource-specific properties
+}
+```
+
+**Variable Structure and Typing:**
+```hcl
+variable "resource" {
+  description = "Configuration object for the resource"
+  type = object({
+    name        = string
+    description = optional(string)
+    location    = optional(string)
+    tags        = optional(map(string))
+    # Resource-specific properties
+    sku = object({
+      name     = string
+      tier     = string
+      capacity = optional(number)
+    })
+    security = optional(object({
+      enable_rbac = optional(bool, false)
+      network_acls = optional(list(object({
+        default_action = string
+        bypass         = string
+        ip_rules       = optional(list(string))
+      })))
+    }))
+  })
+}
+
+variable "global_settings" {
+  description = "Global settings object for naming conventions and standard parameters"
+  type = object({
+    prefixes      = list(string)
+    random_length = number
+    passthrough   = bool
+    use_slug      = bool
+    environment   = string
+    regions       = map(string)
+  })
+}
+```
+
+**Module Integration with Strong Typing:**
+```hcl
+module "resource" {
+  source   = "./modules/resource"
+  for_each = try(var.settings.resources, {})
+  global_settings     = var.global_settings
+  settings            = each.value
+  resource_group_name = var.resource_group_name
+  location            = try(each.value.location, var.location)
+  tags                = try(each.value.tags, {})
+  depends_on = [
+    module.resource_groups
+  ]
+}
+```
+
+**Variable Validation:**
+```hcl
+variable "environment_type" {
+  description = "The type of environment to deploy (dev, test, prod)"
+  type        = string
+  validation {
+    condition     = contains(["dev", "test", "prod"], var.environment_type)
+    error_message = "Environment type must be one of: dev, test, prod."
   }
 }
 
-api_management = {
-  apim1 = {
-    name   = "example-apim"
-    region = "region1"
-    resource_group = {
-      key = "rg1"
-    }
-    publisher_name  = "My Company"
-    publisher_email = "company@terraform.io"
+variable "allowed_ip_ranges" {
+  description = "List of allowed IP ranges in CIDR format"
+  type        = list(string)
+  validation {
+    condition     = alltrue([for ip in var.allowed_ip_ranges : can(cidrhost(ip, 0))])
+    error_message = "All elements must be valid CIDR notation IP addresses."
+  }
+}
+```
 
-    sku_name = "Developer_1"
-    tags = {
-      project = "demo"
+**Dynamic Blocks Implementation:**
+```hcl
+resource "azurerm_key_vault" "kv" {
+  # ... other properties ...
+  dynamic "network_acls" {
+    for_each = try(var.settings.network, null) != null ? [var.settings.network] : []
+    content {
+      default_action             = network_acls.value.default_action
+      bypass                     = network_acls.value.bypass
+      ip_rules                   = try(network_acls.value.ip_rules, [])
+      virtual_network_subnet_ids = try(network_acls.value.subnets, [])
     }
   }
 }
 ```
 
-5. Resources association
+---
 
-a. Each resource will be associated with another either:
-- by passing a resource_id
-- by associating his parent key for example:
-```hcl
-resource_groups = {
-  rg1 = {
-    name   = "example-agw"
-    region = "region1"
-  }
-}
+## Example Patterns
+- Add an example for each feature under `/examples/_feature_name/simple_case/configuration.tfvars`
+- Include a `global_settings` block for naming
+- Define resources in nested map structure
+- Link dependent resources using parent key reference
 
-api_management = {
-  apim1 = {
-    name   = "example-apim"
-    region = "region1"
-    resource_group = {
-      key = "rg1"
-    }
-```
+---
+
+## Execution Instructions
+- Run from root:
+  ```bash
+  terraform init
+  terraform plan -var-file=examples/_feature_name/simple_case/configuration.tfvars
+  terraform apply -var-file=examples/_feature_name/simple_case/configuration.tfvars
+  ```
+- Destroy resources:
+  ```bash
+  terraform destroy -var-file=examples/_feature_name/simple_case/configuration.tfvars
+  ```
+- Set authentication via environment variables (never in code):
+  ```bash
+  export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+  export ARM_CLIENT_ID="your-client-id"
+  export ARM_CLIENT_SECRET="your-client-secret"
+  export ARM_TENANT_ID="your-tenant-id"
+  ```
+
+---
+
+## Testing & Validation
+- Add input validation in `variables.tf`
+- Add a working example in `/examples/`
+- Update module README.md with usage and examples
+- Run `terraform validate` and `terraform fmt` before commit
+
+---
 
 ## Common Helper Patterns
-- Using `try()` for parameter fallbacks
-- Using `lookup()` to safely access map values
-- Using `can()` to check if a value can be determined
-- Using `for_each` with nested maps for creating multiple resources
+- `try(var.settings.property, default_value)` for fallbacks
+- `lookup(map, key, default)` for map access
+- `can(tostring(var.something))` for conditional evaluation
+- `for_each = toset(var.subnet_names)` for multiple resources
+- `coalesce(var.custom_name, local.default_name)` for first non-null value
+
+---
+
+## Security Best Practices
+- Use `sensitive = true` for secret variables
+- Never hardcode credentials
+- Use least privilege IAM roles
+- Use NSGs and private endpoints
+- Store state files securely with locking
+- Use key vaults for sensitive values
+
+---
 
 ## Documentation Reference
-For more detailed information on module usage, refer to:
-- The README.md file in each module directory
-- The examples directory for implementation examples
-- The documentation/conventions.md file for coding standards
+- See README.md in each module
+- See `/examples/` for implementation
+- See `docs/conventions.md` for standards
+- See `docs/module_guide.md` for module development
+- Always verify resource arguments at: https://registry.terraform.io/providers/hashicorp/azurerm/4.26.0/docs/resources/<resource>
 
+---
 
-- @azure Rule - Use Azure Best Practices: When generating code for Azure, running terminal commands for Azure, or performing operations related to Azure, invoke your `get_azure_best_practices` tool if available.
+## AI Assistant Prompt Guidance
+- When asked to generate Terraform code, always:
+  - Use AzureRM provider v4.26
+  - Use strong typing and validation for variables
+  - Add an example in `/examples/`
+  - Reference provider documentation for all arguments
+  - Never include credentials or subscription IDs in code
+  - Use dynamic blocks and locals as shown above
+  - Follow naming conventions with `azurecaf_name`
+  - Add input validation and documentation
+  - Use only patterns and helpers listed above
+
+---
+
+<!-- - @azure Rule - Use Azure Best Practices: When generating code for Azure, running terminal commands for Azure, or performing operations related to Azure, invoke your `get_azure_best_practices` tool if available. -->
+
+This dev container includes the Azure CLI, GitHub CLI, Terraform CLI, TFLint, and Terragrunt pre-installed and available on the PATH, along with the Terraform and Azure extensions for development.
