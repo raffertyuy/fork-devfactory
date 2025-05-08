@@ -63,12 +63,25 @@ variables {
     }
   }
 
+  // Add catalog definition to test
+  dev_center_catalogs = {
+    catalog1 = {
+      name = "test-catalog"
+      dev_center = {
+        key = "devcenter1"
+      }
+      tags = {
+        environment = "test"
+        module      = "dev_center_catalog"
+      }
+    }
+  }
+
   // Empty variables required by the root module
   dev_center_galleries                 = {}
   dev_center_dev_box_definitions       = {}
   dev_center_project_environment_types = {}
   dev_center_network_connections       = {}
-  dev_center_catalogs                  = {}
   shared_image_galleries               = {}
 }
 
@@ -119,5 +132,16 @@ run "full_infrastructure_creation" {
   assert {
     condition     = startswith(module.dev_center_environment_types["envtype1"].dev_center_id, "/subscriptions/")
     error_message = "Environment type dev center ID was not properly formed"
+  }
+  
+  // Test catalog creation
+  assert {
+    condition     = module.dev_center_catalogs["catalog1"].name != ""
+    error_message = "Catalog name should not be empty"
+  }
+  
+  assert {
+    condition     = startswith(module.dev_center_catalogs["catalog1"].dev_center_id, "/subscriptions/")
+    error_message = "Catalog dev center ID was not properly formed"
   }
 }
