@@ -3,19 +3,12 @@ global_settings = {
   random_length = 3
   passthrough   = false
   use_slug      = true
-  environment   = "demo"
-  regions = {
-    region1 = "eastus"
-  }
 }
 
 resource_groups = {
   rg1 = {
-    name   = "devfactory-demo-rg"
-    region = "region1"
-    tags = {
-      environment = "demo"
-    }
+    name   = "devfactory-dc"
+    region = "eastus"
   }
 }
 
@@ -27,10 +20,6 @@ dev_centers = {
     }
     identity = {
       type = "SystemAssigned"
-    }
-    support_info = {
-      email = "admin@contoso.com"
-      url   = "https://support.contoso.com"
     }
     tags = {
       environment = "demo"
@@ -45,6 +34,9 @@ dev_center_catalogs = {
     dev_center = {
       key = "devcenter1"
     }
+    catalog = {
+      name = "default-catalog"
+    }
     tags = {
       environment = "demo"
     }
@@ -58,14 +50,16 @@ dev_center_catalogs_github = {
     dev_center = {
       key = "devcenter1"
     }
-    git_hub = {
-      uri    = "https://github.com/contoso/catalog-repo"
-      branch = "main"
-      path   = "/catalog-items"
-      # Note: In a real environment, use Azure Key Vault for storing the secret
-      # secret_identifier = "https://keyvault.vault.azure.net/secrets/github-token"
+    catalog = {
+      name = "github-catalog",
+      catalog_github = {
+        uri               = "https://github.com/contoso/catalog-repo"
+        branch            = "main"
+        path              = "/catalog-items"
+        # In a real environment, use Azure Key Vault for storing the secret
+        key_vault_key_url = "https://keyvault.vault.azure.net/secrets/github-token"
+      }
     }
-    sync_type = "Scheduled"
     tags = {
       environment = "demo"
       source      = "github"
@@ -75,19 +69,21 @@ dev_center_catalogs_github = {
 
 # Example of a catalog integrated with Azure DevOps
 dev_center_catalogs_ado = {
-  catalog_ado = {
+  catalog_adogit = {
     name = "ado-catalog"
     dev_center = {
       key = "devcenter1"
     }
-    ado_git = {
-      uri    = "https://dev.azure.com/contoso/project/_git/catalog-repo"
-      branch = "main"
-      path   = "/catalog-items"
-      # Note: In a real environment, use Azure Key Vault for storing the secret
-      # secret_identifier = "https://keyvault.vault.azure.net/secrets/ado-token"
+    catalog = {
+      name = "ado-catalog",
+      catalog_adogit = {
+        uri               = "https://dev.azure.com/contoso/project/_git/catalog-repo"
+        branch            = "main"
+        path              = "/catalog-items"
+        # In a real environment, use Azure Key Vault for storing the secret
+        key_vault_key_url = "https://keyvault.vault.azure.net/secrets/ado-token"
+      }
     }
-    sync_type = "Manual"
     tags = {
       environment = "demo"
       source      = "ado"

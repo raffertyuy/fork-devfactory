@@ -35,6 +35,9 @@ variables {
       dev_center = {
         key = "devcenter1"
       }
+      resource_group = {
+        key = "rg1"
+      }
       tags = {
         environment = "test"
         module      = "dev_center_catalog"
@@ -58,7 +61,7 @@ run "catalog_creation" {
   command = plan
 
   module {
-    source = "../../"
+    source = "../../../"
   }
 
   assert {
