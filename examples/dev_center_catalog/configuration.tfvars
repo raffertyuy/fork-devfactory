@@ -40,15 +40,15 @@ dev_center_catalogs = {
       # Only one of the following is required
       catalog_github = {
         uri               = "https://github.com/contoso/catalog-repo"
-        branch            = "main"
-        path              = "/catalog-items"
-        key_vault_key_url = "https://keyvault.vault.azure.net/secrets/github-token"
+        branch            = "" # leave blank if default branch
+        path              = "catalog-items"
+        key_vault_key_url = "" # leave blank if public repo
       }
       catalog_adogit = {
         uri               = "https://dev.azure.com/contoso/project/_git/catalog-repo"
-        branch            = "main"
-        path              = "/catalog-items"
-        key_vault_key_url = "https://keyvault.vault.azure.net/secrets/ado-token"
+        branch            = "" # leave blank if default branch
+        path              = "catalog-items"
+        key_vault_key_url = "" # leave blank if public repo
       }
     }
   }
