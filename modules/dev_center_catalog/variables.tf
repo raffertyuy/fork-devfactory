@@ -26,13 +26,9 @@ variable "dev_center_id" {
   }
 }
 
-variable "catalog" {
-  description = "Configuration object for the Dev Center Catalog"
+variable "catalog_git" {
+  description = "Configuration object for the Dev Center Catalog Git repository"
   type = object({
-    name                       = string
-    description                = optional(string)
-    maximum_dev_boxes_per_user = optional(number)
-    tags                       = optional(map(string))
     catalog_github = optional(object({
       uri               = string
       branch            = string
@@ -47,18 +43,23 @@ variable "catalog" {
     }))
   })
 
-  validation {
-    condition     = length(var.catalog.name) > 0
-    error_message = "Catalog name must be a non-empty string."
-  }
-
   # Validate that at least one catalog source type is specified when needed
   validation {
     condition = (
-      (try(var.catalog.catalog_github, null) != null) || 
-      (try(var.catalog.catalog_adogit, null) != null) || 
+      (try(var.catalog_git.catalog_github, null) != null) || 
+      (try(var.catalog_git.catalog_adogit, null) != null) || 
       true # This makes validation pass when neither is specified
     )
     error_message = "At least one catalog source (catalog_github or catalog_adogit) must be specified."
   }
+}
+
+variable "catalog" {
+  description = "Configuration object for the Dev Center Catalog"
+  type = object({
+    name                       = string
+    description                = optional(string)
+    maximum_dev_boxes_per_user = optional(number)
+    tags                       = optional(map(string))
+  })
 }

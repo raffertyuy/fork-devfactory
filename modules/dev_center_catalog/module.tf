@@ -30,7 +30,7 @@ resource "azurerm_dev_center_catalog" "catalog" {
   dev_center_id       = var.dev_center_id
 
   dynamic "catalog_github" {
-    for_each = try(var.catalog.catalog_github, null) != null ? [var.catalog.catalog_github] : []
+    for_each = try(var.catalog_git.catalog_github, null) != null ? [var.catalog_git.catalog_github] : []
     content {
       uri               = catalog_github.value.uri
       branch            = catalog_github.value.branch
@@ -40,7 +40,7 @@ resource "azurerm_dev_center_catalog" "catalog" {
   }
 
   dynamic "catalog_adogit" {
-    for_each = try(var.catalog.catalog_adogit, null) != null ? [var.catalog.catalog_adogit] : []
+    for_each = try(var.catalog_git.catalog_adogit, null) != null ? [var.catalog_git.catalog_adogit] : []
     content {
       uri               = catalog_adogit.value.uri
       branch            = catalog_adogit.value.branch
