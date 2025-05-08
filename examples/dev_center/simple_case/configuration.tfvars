@@ -8,7 +8,7 @@ global_settings = {
 resource_groups = {
   rg1 = {
     name   = "devfactory-dc"
-    region = "eastus"
+    region = "australiaeast"
   }
 }
 
