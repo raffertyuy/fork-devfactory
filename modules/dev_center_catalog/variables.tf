@@ -8,15 +8,6 @@ variable "global_settings" {
   })
 }
 
-variable "name" {
-  description = "The name of the Dev Center Catalog"
-  type        = string
-  validation {
-    condition     = length(var.name) > 0
-    error_message = "Catalog name must be a non-empty string."
-  }
-}
-
 variable "resource_group_name" {
   description = "The name of the resource group in which the Dev Center exists"
   type        = string
@@ -38,6 +29,10 @@ variable "dev_center_id" {
 variable "catalog" {
   description = "Configuration object for the Dev Center Catalog"
   type = object({
+    name                       = string
+    description                = optional(string)
+    maximum_dev_boxes_per_user = optional(number)
+    tags                       = optional(map(string))
     catalog_github = optional(object({
       uri               = string
       branch            = string

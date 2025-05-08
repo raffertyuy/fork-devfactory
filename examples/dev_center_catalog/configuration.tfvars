@@ -37,9 +37,6 @@ dev_center_catalogs = {
     catalog = {
       name = "default-catalog"
     }
-    tags = {
-      environment = "demo"
-    }
   }
 }
 
@@ -60,10 +57,6 @@ dev_center_catalogs_github = {
         key_vault_key_url = "https://keyvault.vault.azure.net/secrets/github-token"
       }
     }
-    tags = {
-      environment = "demo"
-      source      = "github"
-    }
   }
 }
 
@@ -83,10 +76,6 @@ dev_center_catalogs_ado = {
         # In a real environment, use Azure Key Vault for storing the secret
         key_vault_key_url = "https://keyvault.vault.azure.net/secrets/ado-token"
       }
-    }
-    tags = {
-      environment = "demo"
-      source      = "ado"
     }
   }
 }
