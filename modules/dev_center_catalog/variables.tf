@@ -46,8 +46,8 @@ variable "catalog_git" {
   # Validate that at least one catalog source type is specified when needed
   validation {
     condition = (
-      (try(var.catalog_git.catalog_github, null) != null) || 
-      (try(var.catalog_git.catalog_adogit, null) != null) || 
+      (try(var.catalog_git.catalog_github, null) != null) ||
+      (try(var.catalog_git.catalog_adogit, null) != null) ||
       true # This makes validation pass when neither is specified
     )
     error_message = "At least one catalog source (catalog_github or catalog_adogit) must be specified."
