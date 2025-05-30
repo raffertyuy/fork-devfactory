@@ -88,57 +88,6 @@ dev_centers = {
 }
 ```
 
-## Dev Center DevBox Definition Module
-
-### Purpose
-Creates DevBox definitions within an Azure Dev Center, specifying VM images, sizes, and configurations.
-
-### Usage
-```hcl
-module "dev_center_dev_box_definitions" {
-  source   = "./modules/dev_center_dev_box_definition"
-  for_each = var.dev_center_dev_box_definitions
-
-  global_settings     = var.global_settings
-  dev_box_definition  = each.value
-  dev_center_id       = lookup(each.value, "dev_center_id", null) != null ? each.value.dev_center_id : module.dev_centers[each.value.dev_center.key].id
-  resource_group_name = lookup(each.value, "resource_group_name", null) != null ? each.value.resource_group_name : module.resource_groups[each.value.resource_group.key].name
-}
-```
-
-### Input Variables
-| Variable | Type | Required | Description |
-|----------|------|----------|-------------|
-| `global_settings` | `object` | Yes | Global settings for naming and prefixing |
-| `dev_box_definition` | `object` | Yes | Dev box definition configuration object |
-| `dev_center_id` | `string` | Yes | The ID of the Dev Center |
-| `resource_group_name` | `string` | Yes | Name of the resource group |
-
-### DevBox Definition Configuration Options
-```hcl
-dev_center_dev_box_definitions = {
-  definition1 = {
-    name = "windows11-dev"
-    dev_center = {
-      key = "devcenter1"
-    }
-    resource_group = {
-      key = "rg1"
-    }
-    # Currently assumes that image definition is one of that's available in the default gallery
-    # Format: /galleries/{gallery}/images/{image-definition}
-    image_reference_id = "/galleries/default/images/microsoftwindowsdesktop_windows-ent-cpc_win11-24h2-ent-cpc-m365"
-    sku_name = "general_i_8c32gb256ssd_v2"
-    hibernate_support = {
-      enabled = true
-    }
-    tags = {
-      environment = "demo"
-    }
-  }
-}
-```
-
 ## Dev Center Project Module
 
 ### Purpose
