@@ -80,11 +80,11 @@ resource "azapi_resource" "dev_box_definition" {
           id = local.processed_image_reference_id
         }
       } : {},      # SKU configuration
-      try(var.dev_box_definition.sku_name, null) != null ? {
+      {
         sku = {
           name = var.dev_box_definition.sku_name
         }
-      } : {},
+      },
 
       # Hibernate support configuration
       try(var.dev_box_definition.hibernate_support, null) != null ? {
