@@ -22,17 +22,17 @@ locals {
     try(var.tags, {})
   )
   # Process image reference ID - handle both absolute and relative formats
+  absolute_image_reference_id = startswith(try(var.dev_box_definition.image_reference_id, ""), "/subscriptions") ? replace(
+    var.dev_box_definition.image_reference_id,
+    "subscription-id",
+    data.azapi_client_config.current.subscription_id
+  ) : null
+
+  relative_image_reference_id = startswith(try(var.dev_box_definition.image_reference_id, ""), "galleries/") ? "${var.dev_center_id}/${var.dev_box_definition.image_reference_id}" : null
+
   processed_image_reference_id = try(var.dev_box_definition.image_reference_id, null) != null ? (
-    # If it starts with /subscriptions, it's an absolute path - replace subscription-id placeholder
-    startswith(var.dev_box_definition.image_reference_id, "/subscriptions") ? replace(
-      var.dev_box_definition.image_reference_id,
-      "subscription-id",
-      data.azapi_client_config.current.subscription_id
-      ) : (
-      # If it starts with galleries/, it's relative to the dev center
-      startswith(var.dev_box_definition.image_reference_id, "galleries/") ?
-      "${var.dev_center_id}/${var.dev_box_definition.image_reference_id}" :
-      # Otherwise, assume it's a complete reference
+    absolute_image_reference_id != null ? absolute_image_reference_id : (
+      relative_image_reference_id != null ? relative_image_reference_id :
       var.dev_box_definition.image_reference_id
     )
   ) : null
