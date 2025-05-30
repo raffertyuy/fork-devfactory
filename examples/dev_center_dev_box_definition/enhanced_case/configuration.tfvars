@@ -58,7 +58,7 @@ dev_centers = {
   }
 }
 
-dev_center_dev_box_definitions = {  # Standard Windows 11 development environment
+dev_center_dev_box_definitions = { # Standard Windows 11 development environment
   win11_standard = {
     name = "win11-standard"
     dev_center = {

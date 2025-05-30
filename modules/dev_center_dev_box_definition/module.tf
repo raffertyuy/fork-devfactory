@@ -79,7 +79,7 @@ resource "azapi_resource" "dev_box_definition" {
         imageReference = {
           id = local.processed_image_reference_id
         }
-      } : {},      # SKU configuration
+      } : {}, # SKU configuration
       {
         sku = {
           name = var.dev_box_definition.sku_name

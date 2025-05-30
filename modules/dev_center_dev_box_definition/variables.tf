@@ -33,7 +33,7 @@ variable "dev_box_definition" {
     image_reference_id = optional(string)
     image_reference = optional(object({
       id = string
-    }))    # SKU configuration - storage is defined within the SKU name itself
+    })) # SKU configuration - storage is defined within the SKU name itself
     sku_name = string
 
     # Hibernate support
