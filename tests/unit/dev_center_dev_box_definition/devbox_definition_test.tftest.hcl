@@ -41,7 +41,8 @@ variables {
       }
       resource_group = {
         key = "rg1"
-      }      image_reference_id = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/test-rg/providers/Microsoft.Compute/galleries/testgallery/images/testimage/versions/latest"
+      }
+      image_reference_id = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/test-rg/providers/Microsoft.Compute/galleries/testgallery/images/testimage/versions/latest"
       sku_name           = "general_i_8c32gb256ssd_v2"
       hibernate_support = {
         enabled = true
@@ -63,7 +64,8 @@ variables {
       }
       image_reference = {
         id = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/test-rg/providers/Microsoft.Compute/galleries/testgallery/images/testimage2/versions/1.0.0"
-      }      sku_name        = "general_i_16c64gb512ssd_v2"
+      }
+      sku_name        = "general_i_16c64gb512ssd_v2"
       hibernate_support = {
         enabled = false
       }
