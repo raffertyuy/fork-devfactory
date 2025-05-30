@@ -129,7 +129,7 @@ dev_center_projects = {
     }
     description                = "Development project for the engineering team"
     maximum_dev_boxes_per_user = 3
-    dev_box_definition_names   = ["windows11-dev"]
+    dev_box_definition_names   = ["win11-dev"]
     identity = {
       type = "SystemAssigned"
     }

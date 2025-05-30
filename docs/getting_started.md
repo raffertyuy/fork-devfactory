@@ -186,7 +186,7 @@ dev_centers = {
 
 dev_center_dev_box_definitions = {
   definition1 = {
-    name = "windows11-dev"
+    name = "win11-dev"
     dev_center = {
       key = "devcenter1"  # References the dev center above
     }

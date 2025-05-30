@@ -12,3 +12,6 @@ terraform {
   }
   required_version = ">= 1.12.1"
 }
+
+# Data source to get current subscription information
+data "azapi_client_config" "current" {}

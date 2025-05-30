@@ -12,7 +12,7 @@ global_settings = {
 resource_groups = {
   rg_dev_center = {
     name   = "rg-dev-center"
-    region = "East US"
+    region = "eastus"
     tags = {
       purpose = "development"
     }
