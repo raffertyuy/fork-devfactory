@@ -72,9 +72,9 @@ The project includes comprehensive documentation to help you understand and use 
 
 ## Requirements
 
-- Terraform ≥ 1.9.0
-- AzureRM Provider ~> 4.26.0
+- Terraform ≥ 1.12.1
 - AzureCAF Provider ~> 1.2.0
+- AzureAPI Provider ~> 2.0.0
 - Azure CLI (latest version recommended)
 - An active Azure subscription
 
@@ -83,17 +83,49 @@ The project includes comprehensive documentation to help you understand and use 
 DevFactory is designed with a modular approach. The root module (main.tf) is the entry point that orchestrates the creation of all resources, and you provide different variable files to control what gets deployed:
 
 ```bash
+# Login to Azure
+az login
+
 # Initialize Terraform
 terraform init
 
 # Deploy a simple resource group configuration
+terraform plan -var-file=examples/resource_group/simple_case/configuration.tfvars
 terraform apply -var-file=examples/resource_group/simple_case/configuration.tfvars
 
 # Deploy a dev center with devboxes
+terraform plan -var-file=examples/dev_center/simple_case/configuration.tfvars
 terraform apply -var-file=examples/dev_center/simple_case/configuration.tfvars
 ```
 
 For more complex scenarios, check out the examples in the `examples` directory. Each example demonstrates a specific use case and can be used as a starting point for your own configurations.
+
+## Testing
+
+DevFactory includes a comprehensive test suite to validate all modules:
+
+- **Unit Tests**: Test individual modules in isolation
+- **Integration Tests**: Test the interaction between multiple modules
+
+### Running Tests
+
+You can run tests using the provided scripts:
+
+```bash
+# Run all tests
+./tests/run_tests.sh
+
+# Run a specific test
+./tests/run_test.sh resource_group
+
+# Run a specific test with verbose output
+./tests/run_test.sh --verbose dev_center
+
+# Run a specific test run block
+./tests/run_test.sh --run test_basic_project project
+```
+
+For more details on testing, see the [Testing Guide](docs/testing.md).
 
 ## Contributing
 

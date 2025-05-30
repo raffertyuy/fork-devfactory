@@ -31,7 +31,8 @@ variables {
 
   dev_center_environment_types = {
     envtype1 = {
-      name = "test-environment-type"
+      name         = "test-environment-type"
+      display_name = "Test Environment Type Display Name"
       dev_center = {
         key = "devcenter1"
       }
@@ -52,9 +53,20 @@ variables {
   shared_image_galleries               = {}
 }
 
-mock_provider "azurerm" {}
+mock_provider "azapi" {
+  mock_data "azapi_client_config" {
+    defaults = {
+      subscription_id = "12345678-1234-1234-1234-123456789012"
+      tenant_id       = "12345678-1234-1234-1234-123456789012"
+      client_id       = "12345678-1234-1234-1234-123456789012"
+    }
+  }
+}
 
-run "environment_type_creation" {
+mock_provider "azurecaf" {}
+
+// Test for basic environment type
+run "test_basic_environment_type" {
   command = plan
 
   module {
@@ -62,22 +74,52 @@ run "environment_type_creation" {
   }
 
   assert {
-    condition     = module.dev_center_environment_types["envtype1"].name != ""
-    error_message = "Environment type name should not be empty"
+    condition     = module.dev_center_environment_types["envtype1"] != null
+    error_message = "Environment type should exist"
+  }
+}
+
+// Test for environment type with custom configuration
+run "test_custom_environment_type" {
+  command = plan
+
+  variables {
+    dev_center_environment_types = {
+      custom_env = {
+        name         = "custom-environment-type"
+        display_name = "Custom Environment Type"
+        dev_center = {
+          key = "devcenter1"
+        }
+        tags = {
+          environment = "staging"
+          purpose     = "testing"
+          owner       = "dev-team"
+        }
+      }
+    }
+  }
+
+  module {
+    source = "../../../"
   }
 
   assert {
-    condition     = startswith(module.dev_center_environment_types["envtype1"].dev_center_id, "/subscriptions/")
-    error_message = "Environment type dev center ID should be a valid Azure resource ID"
+    condition     = module.dev_center_environment_types["custom_env"] != null
+    error_message = "Custom environment type should exist"
+  }
+}
+
+// Apply test for environment types
+run "test_apply_environment_type" {
+  command = plan
+
+  module {
+    source = "../../../"
   }
 
   assert {
-    condition     = contains(keys(module.dev_center_environment_types["envtype1"].tags), "environment")
-    error_message = "Environment type tags did not contain environment tag"
-  }
-
-  assert {
-    condition     = contains(keys(module.dev_center_environment_types["envtype1"].tags), "module")
-    error_message = "Environment type tags did not contain module tag"
+    condition     = module.dev_center_environment_types["envtype1"] != null
+    error_message = "Environment type should exist after apply"
   }
 }

@@ -5,7 +5,10 @@ on:
       - "**.tf"
       - "**.tfvars"
       - "**.tftest.hcl"
+      - "tests/run_test.sh"
+      - "tests/run_tests.sh"
       - ".github/workflows/terraform-tests.yml"
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -16,9 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.11.4
+          terraform_version: 1.12.1
       - name: Terraform Init
         run: terraform init -backend=false
       - name: Terraform Format
@@ -31,9 +36,10 @@ jobs:
     outputs:
       unit_tests: ${{ steps.find-unit-tests.outputs.tests }}
       integration_tests: ${{ steps.find-integration-tests.outputs.tests }}
-      example_tests: ${{ steps.find-example-tests.outputs.tests }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: Find unit tests
         id: find-unit-tests
         run: |
@@ -43,11 +49,6 @@ jobs:
         id: find-integration-tests
         run: |
           TESTS=$(find tests/integration -name "*_test.tftest.hcl" -type f | jq -R -s -c 'split("\n")[:-1]')
-          echo "tests=$TESTS" >> $GITHUB_OUTPUT
-      - name: Find example tests
-        id: find-example-tests
-        run: |
-          TESTS=$(find tests/examples -name "*_test.tftest.hcl" -type f | jq -R -s -c 'split("\n")[:-1]')
           echo "tests=$TESTS" >> $GITHUB_OUTPUT
 
   unit-tests:
@@ -59,13 +60,19 @@ jobs:
         test: ${{fromJson(needs.discover-tests.outputs.unit_tests)}}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.11.4
+          terraform_version: 1.12.1
       - name: Terraform Init
         run: terraform init -backend=false
-      - name: Run Test
-        run: terraform test -verbose "${{ matrix.test }}"
+      - name: Run Unit Test
+        run: |
+          TEST_DIR=$(dirname "${{ matrix.test }}")
+          cd $TEST_DIR
+          terraform init -input=false
+          terraform test -verbose $(basename "${{ matrix.test }}")
 
   integration-tests:
     needs: [pre-check, discover-tests]
@@ -76,27 +83,34 @@ jobs:
         test: ${{fromJson(needs.discover-tests.outputs.integration_tests)}}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.11.4
+          terraform_version: 1.12.1
       - name: Terraform Init
         run: terraform init -backend=false
-      - name: Run Test
-        run: terraform test -verbose "${{ matrix.test }}"
+      - name: Run Integration Test
+        run: |
+          TEST_DIR=$(dirname "${{ matrix.test }}")
+          cd $TEST_DIR
+          terraform init -input=false
+          terraform test -verbose $(basename "${{ matrix.test }}")
 
-  example-tests:
-    needs: [pre-check, discover-tests]
-    if: needs.discover-tests.outputs.example_tests != '[]'
+  comprehensive-tests:
+    needs: [unit-tests, integration-tests]
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        test: ${{fromJson(needs.discover-tests.outputs.example_tests)}}
+    if: always()
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.11.4
-      - name: Terraform Init
-        run: terraform init -backend=false
-      - name: Run Test
-        run: terraform test -verbose "${{ matrix.test }}"
+          terraform_version: 1.12.1
+      - name: Make test scripts executable
+        run: |
+          chmod +x tests/run_test.sh
+          chmod +x tests/run_tests.sh
+      - name: Run All Tests
+        run: ./tests/run_tests.sh
