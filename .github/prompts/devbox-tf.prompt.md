@@ -271,6 +271,7 @@ body = {
 - Check Azure API documentation for exact property names and types
 - Use Azure MCP server tools to verify latest API schemas
 - Test with actual API calls when implementing new resource properties
+- Also test changes with TFLint, `terraform fmt` and `terraform validate`
 
 ---
 
