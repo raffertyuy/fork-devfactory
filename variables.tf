@@ -88,11 +88,22 @@ variable "dev_center_dev_box_definitions" {
     resource_group = object({
       key = string
     })
-    image_reference_id = string
-    sku_name           = string
+
+    # Image reference - supports both direct ID and object form
+    image_reference_id = optional(string)
+    image_reference = optional(object({
+      id = string
+    }))
+
+    # SKU configuration - storage is defined within the SKU name itself
+    sku_name = string
+
+    # Hibernate support
     hibernate_support = optional(object({
       enabled = optional(bool, false)
     }))
+
+    # Tags
     tags = optional(map(string), {})
   }))
   default = {}

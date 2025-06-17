@@ -31,7 +31,7 @@ module "resource_group" {
 
   resource_group = {
     name     = "my-project"
-    location = "East US"
+    location = "eastus"
     tags = {
       environment = "development"
     }
@@ -59,7 +59,7 @@ module "resource_group" {
 
   resource_group = {
     name     = "complex-project"
-    location = "East US"
+    location = "eastus"
     tags = {
       environment = "production"
       cost_center = "engineering"

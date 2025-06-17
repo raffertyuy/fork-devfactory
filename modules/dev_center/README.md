@@ -39,7 +39,7 @@ module "dev_center" {
   }
 
   resource_group_name = "my-resource-group"
-  location           = "East US"
+  location           = "eastus"
 }
 ```
 
@@ -79,7 +79,7 @@ module "dev_center" {
   }
 
   resource_group_name = "my-resource-group"
-  location           = "East US"
+  location           = "eastus"
 }
 ```
 

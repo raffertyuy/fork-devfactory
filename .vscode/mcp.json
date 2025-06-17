@@ -1,0 +1,25 @@
+{
+    // TODO: The .devcontainer can't run these MCP servers at the moment. Open this workspace locally for now.
+    "servers": {
+        "Terraform MCP Server": {
+            "command": "docker",
+            "args": [
+                "run",
+                "-i",
+                "--rm",
+                "hashicorp/terraform-mcp-server"
+            ],
+            "env": {},
+            "type": "stdio"
+        },
+        "Azure MCP Server": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@azure/mcp@0.0.21",
+                "server",
+                "start"
+            ]
+        }
+    }
+}

@@ -41,7 +41,7 @@ module "dev_center_project" {
 
   dev_center_id     = "/subscriptions/.../devcenters/mydevcenter"
   resource_group_id = "/subscriptions/.../resourceGroups/myrg"
-  location          = "East US"
+  location          = "eastus"
 }
 ```
 
@@ -93,7 +93,7 @@ module "dev_center_project" {
 
   dev_center_id     = "/subscriptions/.../devcenters/mydevcenter"
   resource_group_id = "/subscriptions/.../resourceGroups/myrg"
-  location          = "East US"
+  location          = "eastus"
 
   tags = {
     environment = "production"

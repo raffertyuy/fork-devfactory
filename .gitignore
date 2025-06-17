@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# Environment Variables
+.env
+
 # User-specific files
 *.rsuser
 *.suo
@@ -382,6 +385,7 @@ FodyWeavers.xsd
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+!.vscode/mcp.json
 *.code-workspace
 
 # Local History for Visual Studio Code
