@@ -77,6 +77,13 @@ resource "azapi_resource" "dev_center" {
   tags = local.tags
 
   response_export_values = ["properties"]
+
+  # Ignore changes to system-managed tags that Azure automatically adds
+  lifecycle {
+    ignore_changes = [
+      tags["hidden-title"]
+    ]
+  }
 }
 
 data "azapi_client_config" "current" {}

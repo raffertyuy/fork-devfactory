@@ -91,4 +91,11 @@ resource "azapi_resource" "project" {
       } : null
     }
   }
+
+  # Ignore changes to system-managed tags that Azure automatically adds
+  lifecycle {
+    ignore_changes = [
+      tags["hidden-title"]
+    ]
+  }
 }
