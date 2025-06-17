@@ -77,7 +77,6 @@ variable "dev_center_galleries" {
   default = {}
 }
 
-# tflint-ignore: terraform_unused_declarations
 variable "dev_center_dev_box_definitions" {
   description = "Dev Center Dev Box Definitions configuration objects"
   type = map(object({
