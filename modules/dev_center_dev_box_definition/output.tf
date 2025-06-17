@@ -35,6 +35,31 @@ output "hibernate_support" {
   value       = try(azapi_resource.dev_box_definition.output.properties.hibernateSupport, null)
 }
 
+output "os_storage_type" {
+  description = "The storage type used for the Operating System disk"
+  value       = try(azapi_resource.dev_box_definition.output.properties.osStorageType, null)
+}
+
+output "image_validation_status" {
+  description = "Validation status of the configured image"
+  value       = try(azapi_resource.dev_box_definition.output.properties.imageValidationStatus, null)
+}
+
+output "image_validation_error_details" {
+  description = "Details for image validator error"
+  value       = try(azapi_resource.dev_box_definition.output.properties.imageValidationErrorDetails, null)
+}
+
+output "validation_status" {
+  description = "Validation status for the Dev Box Definition"
+  value       = try(azapi_resource.dev_box_definition.output.properties.validationStatus, null)
+}
+
+output "active_image_reference" {
+  description = "Image reference information for the currently active image"
+  value       = try(azapi_resource.dev_box_definition.output.properties.activeImageReference, null)
+}
+
 output "tags" {
   description = "The tags assigned to the DevBox Definition"
   value       = azapi_resource.dev_box_definition.tags

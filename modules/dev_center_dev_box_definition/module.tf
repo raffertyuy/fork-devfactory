@@ -3,7 +3,7 @@ terraform {
   required_providers {
     azurecaf = {
       source  = "aztfmod/azurecaf"
-      version = "~> 1.2.0"
+      version = "~> 1.2.29"
     }
     azapi = {
       source  = "Azure/azapi"
@@ -48,11 +48,22 @@ locals {
       var.dev_box_definition.image_reference.id
     )
   } : null
+
+  # Build SKU object for advanced configuration - filter null values to avoid type issues
+  sku_object = var.dev_box_definition.sku != null ? merge(
+    {
+      name = var.dev_box_definition.sku.name
+    },
+    var.dev_box_definition.sku.capacity != null ? { capacity = var.dev_box_definition.sku.capacity } : {},
+    var.dev_box_definition.sku.family != null ? { family = var.dev_box_definition.sku.family } : {},
+    var.dev_box_definition.sku.size != null ? { size = var.dev_box_definition.sku.size } : {},
+    var.dev_box_definition.sku.tier != null ? { tier = var.dev_box_definition.sku.tier } : {}
+  ) : null
 }
 
 resource "azurecaf_name" "dev_box_definition" {
   name          = var.dev_box_definition.name
-  resource_type = "general"
+  resource_type = "azurerm_dev_center_dev_box_definition"
   prefixes      = var.global_settings.prefixes
   random_length = var.global_settings.random_length
   clean_input   = true
@@ -68,8 +79,8 @@ resource "azapi_resource" "dev_box_definition" {
   tags                   = local.tags
   response_export_values = ["properties.provisioningState", "properties.imageReference", "properties.sku"]
 
-  # Disable schema validation as the provider validation is overly strict for preview APIs
-  schema_validation_enabled = false
+  # Enable schema validation
+  schema_validation_enabled = true
   body = {
     properties = merge(
       # Image reference configuration
@@ -79,16 +90,25 @@ resource "azapi_resource" "dev_box_definition" {
         imageReference = {
           id = local.processed_image_reference_id
         }
-      } : {}, # SKU configuration
-      {
+      } : {},
+
+      # SKU configuration - supports both simple name and full object
+      local.sku_object != null ? {
+        sku = local.sku_object
+        } : var.dev_box_definition.sku_name != null ? {
         sku = {
           name = var.dev_box_definition.sku_name
         }
-      },
+      } : {},
+
+      # OS Storage Type configuration
+      try(var.dev_box_definition.os_storage_type, null) != null ? {
+        osStorageType = var.dev_box_definition.os_storage_type
+      } : {},
 
       # Hibernate support configuration
-      try(var.dev_box_definition.hibernate_support, null) != null ? {
-        hibernateSupport = try(var.dev_box_definition.hibernate_support.enabled, false) ? "Enabled" : "Disabled"
+      var.dev_box_definition.hibernate_support != null ? {
+        hibernateSupport = var.dev_box_definition.hibernate_support ? "Enabled" : "Disabled"
       } : {}
     )
   }

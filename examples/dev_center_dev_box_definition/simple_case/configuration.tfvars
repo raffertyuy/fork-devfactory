@@ -41,9 +41,7 @@ dev_center_dev_box_definitions = {
     image_reference_id = "galleries/default/images/microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2"
     sku_name           = "general_i_8c32gb256ssd_v2"
 
-    hibernate_support = {
-      enabled = false
-    }
+    hibernate_support = false
 
     tags = {
       module  = "dev_center_dev_box_definition"

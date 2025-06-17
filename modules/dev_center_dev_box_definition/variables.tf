@@ -33,13 +33,23 @@ variable "dev_box_definition" {
     image_reference_id = optional(string)
     image_reference = optional(object({
       id = string
-    })) # SKU configuration - storage is defined within the SKU name itself
-    sku_name = string
-
-    # Hibernate support
-    hibernate_support = optional(object({
-      enabled = optional(bool, false)
     }))
+
+    # SKU configuration - supports both simple name and full object
+    sku_name = optional(string)
+    sku = optional(object({
+      name     = string           # Required: The name of the SKU
+      capacity = optional(number) # Optional: Integer for scale out/in support
+      family   = optional(string) # Optional: Hardware generation
+      size     = optional(string) # Optional: Standalone SKU size code
+      tier     = optional(string) # Optional: Free, Basic, Standard, Premium
+    }))
+
+    # OS Storage type for the Operating System disk
+    os_storage_type = optional(string)
+
+    # Hibernate support - simplified boolean (maps to "Enabled"/"Disabled" in API)
+    hibernate_support = optional(bool, false)
 
     # Tags
     tags = optional(map(string), {})
@@ -53,6 +63,39 @@ variable "dev_box_definition" {
     error_message = "Either image_reference_id or image_reference must be specified."
   }
 
+  validation {
+    condition = (
+      var.dev_box_definition.sku_name != null ||
+      var.dev_box_definition.sku != null
+    )
+    error_message = "Either sku_name or sku must be specified."
+  }
+
+  validation {
+    condition = (
+      var.dev_box_definition.sku == null ||
+      var.dev_box_definition.sku.name != null
+    )
+    error_message = "When using sku object, the 'name' field is required."
+  }
+
+  validation {
+    condition = (
+      var.dev_box_definition.sku == null ||
+      var.dev_box_definition.sku.tier == null ||
+      contains(["Free", "Basic", "Standard", "Premium"], var.dev_box_definition.sku.tier)
+    )
+    error_message = "SKU tier must be one of: Free, Basic, Standard, Premium."
+  }
+
+  validation {
+    condition = (
+      var.dev_box_definition.sku == null ||
+      var.dev_box_definition.sku.capacity == null ||
+      var.dev_box_definition.sku.capacity >= 1
+    )
+    error_message = "SKU capacity must be a positive integer when specified."
+  }
 
   validation {
     condition     = length(var.dev_box_definition.name) <= 63
@@ -62,6 +105,14 @@ variable "dev_box_definition" {
   validation {
     condition     = can(regex("^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$", var.dev_box_definition.name))
     error_message = "DevBox Definition name must start and end with alphanumeric characters and can contain hyphens."
+  }
+
+  validation {
+    condition = (
+      var.dev_box_definition.os_storage_type == null ||
+      can(regex("^(ssd|premium)_(128|256|512|1024)gb$", var.dev_box_definition.os_storage_type))
+    )
+    error_message = "OS storage type must follow the pattern: (ssd|premium)_(128|256|512|1024)gb (e.g., 'ssd_256gb', 'premium_512gb')."
   }
 }
 
