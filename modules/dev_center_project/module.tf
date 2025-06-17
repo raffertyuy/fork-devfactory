@@ -3,7 +3,7 @@ terraform {
   required_providers {
     azurecaf = {
       source  = "aztfmod/azurecaf"
-      version = "~> 1.2.0"
+      version = "~> 1.2.29"
     }
     azapi = {
       source  = "Azure/azapi"
@@ -19,7 +19,7 @@ locals {
 
 resource "azurecaf_name" "project" {
   name          = var.project.name
-  resource_type = "general"
+  resource_type = "azurerm_dev_center_project"
   prefixes      = var.global_settings.prefixes
   random_length = var.global_settings.random_length
   clean_input   = true

@@ -111,7 +111,7 @@ For more examples, see the [Dev Center Project examples](../../../examples/dev_c
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
 | <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) | ~> 2.4.0 |
-| <a name="requirement_azurecaf"></a> [azurecaf](#requirement\_azurecaf) | ~> 1.2.0 |
+| <a name="requirement_azurecaf"></a> [azurecaf](#requirement\_azurecaf) | ~> 1.2.29 |
 
 ## Providers
 
