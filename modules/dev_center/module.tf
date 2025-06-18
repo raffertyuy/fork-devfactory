@@ -3,7 +3,7 @@ terraform {
   required_providers {
     azurecaf = {
       source  = "aztfmod/azurecaf"
-      version = "~> 1.2.0"
+      version = "~> 1.2.29"
     }
     azapi = {
       source  = "Azure/azapi"
@@ -25,7 +25,7 @@ locals {
 # Using resource instead of data source to ensure stable naming across plan/apply
 resource "azurecaf_name" "dev_center" {
   name          = var.dev_center.name
-  resource_type = "general"
+  resource_type = "azurerm_dev_center"
   prefixes      = var.global_settings.prefixes
   random_length = var.global_settings.random_length
   clean_input   = true
@@ -77,6 +77,13 @@ resource "azapi_resource" "dev_center" {
   tags = local.tags
 
   response_export_values = ["properties"]
+
+  # Ignore changes to system-managed tags that Azure automatically adds
+  lifecycle {
+    ignore_changes = [
+      tags["hidden-title"]
+    ]
+  }
 }
 
 data "azapi_client_config" "current" {}

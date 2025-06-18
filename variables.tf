@@ -77,7 +77,6 @@ variable "dev_center_galleries" {
   default = {}
 }
 
-# tflint-ignore: terraform_unused_declarations
 variable "dev_center_dev_box_definitions" {
   description = "Dev Center Dev Box Definitions configuration objects"
   type = map(object({
@@ -95,13 +94,21 @@ variable "dev_center_dev_box_definitions" {
       id = string
     }))
 
-    # SKU configuration - storage is defined within the SKU name itself
-    sku_name = string
+    # SKU configuration - supports both simple name and full object
+    sku_name = optional(string)
+    sku = optional(object({
+      name     = string
+      capacity = optional(number)
+      family   = optional(string)
+      size     = optional(string)
+      tier     = optional(string) # Free, Basic, Standard, Premium
+    }))
+
+    # OS Storage type for the Operating System disk
+    os_storage_type = optional(string)
 
     # Hibernate support
-    hibernate_support = optional(object({
-      enabled = optional(bool, false)
-    }))
+    hibernate_support = optional(bool, false)
 
     # Tags
     tags = optional(map(string), {})

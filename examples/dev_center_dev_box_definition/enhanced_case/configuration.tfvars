@@ -70,9 +70,7 @@ dev_center_dev_box_definitions = { # Standard Windows 11 development environment
     image_reference_id = "galleries/default/images/microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2"
     sku_name           = "general_i_8c32gb256ssd_v2"
 
-    hibernate_support = {
-      enabled = true # Enable hibernate for cost optimization
-    }
+    hibernate_support = true # Enable hibernate for cost optimization
 
     tags = {
       module      = "dev_center_dev_box_definition"
@@ -96,9 +94,10 @@ dev_center_dev_box_definitions = { # Standard Windows 11 development environment
     }
     sku_name = "general_i_32c128gb1024ssd_v2" # High-performance SKU
 
-    hibernate_support = {
-      enabled = false # Keep running for long-running AI training
-    }
+    hibernate_support = false # Keep running for long-running AI training
+
+    # Test osStorageType property
+    os_storage_type = "ssd_1024gb"
 
     tags = {
       module      = "dev_center_dev_box_definition"
@@ -108,30 +107,6 @@ dev_center_dev_box_definitions = { # Standard Windows 11 development environment
       gpu_enabled = "true"
       cost_tier   = "high"
       auto_delete = "disabled"
-    }
-  }
-  # Linux development environment
-  ubuntu_development = {
-    name = "ubuntu-development"
-    dev_center = {
-      key = "platform"
-    }
-    resource_group = {
-      key = "rg_devbox"
-    } # Ubuntu development image (using built-in Ubuntu 22.04)
-    image_reference_id = "galleries/default/images/canonical_0001-com-ubuntu-server-jammy_22_04-lts-gen2"
-    sku_name           = "general_i_16c64gb512ssd_v2"
-
-    hibernate_support = {
-      enabled = true
-    }
-
-    tags = {
-      module      = "dev_center_dev_box_definition"
-      image_type  = "ubuntu"
-      tier        = "standard"
-      purpose     = "linux-development"
-      auto_delete = "enabled"
     }
   }
   # Specialized environment for data science work
@@ -144,11 +119,14 @@ dev_center_dev_box_definitions = { # Standard Windows 11 development environment
       key = "rg_devbox"
     } # Data science image (using built-in Windows 11 with development tools)
     image_reference_id = "galleries/default/images/microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2"
-    sku_name           = "general_i_16c64gb512ssd_v2"
 
-    hibernate_support = {
-      enabled = true
-    }
+    # Use simple SKU configuration
+    sku_name = "general_i_16c64gb512ssd_v2"
+
+    hibernate_support = true
+
+    # Test osStorageType property
+    os_storage_type = "ssd_512gb"
 
     tags = {
       module      = "dev_center_dev_box_definition"
@@ -157,6 +135,39 @@ dev_center_dev_box_definitions = { # Standard Windows 11 development environment
       purpose     = "data-science"
       tools       = "python-r-jupyter"
       auto_delete = "enabled"
+    }
+  }
+  # Advanced SKU object configuration example
+  win11_enterprise_advanced = {
+    name = "win11-enterprise-advanced"
+    dev_center = {
+      key = "platform"
+    }
+    resource_group = {
+      key = "rg_devbox"
+    }
+    # Enterprise development image
+    image_reference_id = "galleries/default/images/microsoftvisualstudio_visualstudioplustools_vs-2022-pro-general-win11-m365-gen2"
+
+    # Advanced SKU object configuration instead of simple sku_name
+    sku = {
+      name = "general_i_16c64gb512ssd_v2"
+      tier = "Standard"
+    }
+
+    hibernate_support = true
+
+    # Test osStorageType property
+    os_storage_type = "ssd_512gb"
+
+    tags = {
+      module      = "dev_center_dev_box_definition"
+      image_type  = "win11"
+      tier        = "enterprise"
+      purpose     = "enterprise-development"
+      sku_type    = "advanced_object"
+      auto_delete = "enabled"
+      config_type = "advanced"
     }
   }
 }

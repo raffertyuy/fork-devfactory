@@ -61,7 +61,7 @@ echo -e "----------------\n"
 failed_tests=()
 
 # Run all unit tests
-unit_test_dirs=("tests/unit/resource_group" "tests/unit/dev_center" "tests/unit/dev_center_environment_type" "tests/unit/dev_center_project" "tests/unit/dev_center_catalog")
+unit_test_dirs=("tests/unit/resource_group" "tests/unit/dev_center" "tests/unit/dev_center_dev_box_definition" "tests/unit/dev_center_environment_type" "tests/unit/dev_center_project" "tests/unit/dev_center_catalog")
 
 for dir in "${unit_test_dirs[@]}"; do
   test_name=$(basename "$dir")
