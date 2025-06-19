@@ -6,6 +6,18 @@ This document summarizes the updates made to the Azure DevCenter module to imple
 
 ## Latest Changes (June 19, 2025)
 
+### Merge Conflict Resolution
+- **Fixed**: Resolved merge conflicts in PR #24 (devboxpools branch)
+- **Conflict Location**: `tests/run_tests.sh` - between dynamic test discovery and hardcoded test list
+- **Resolution**: Preserved enhanced dynamic test discovery functionality while merging upstream changes
+- **Merged Changes**: Updated from upstream main:
+  - `.devcontainer/devcontainer.json` - DevContainer configuration updates
+  - `.vscode/mcp.json` - MCP server configuration
+  - `README.md` - Documentation improvements
+  - `docs/getting_started.md` - Getting started guide updates
+- **Type**: Bug fix and merge resolution
+- **Breaking Change**: No
+
 ### TFLint Compliance Fixes
 - **Fixed**: Added missing `required_version = ">= 1.9.0"` to Terraform blocks
   - `modules/dev_center_project_pool/module.tf`
