@@ -4,6 +4,37 @@
 
 This document summarizes the updates made to the Azure DevCenter module to implement the 2025-04-01-preview API version and fix the identity block placement.
 
+## Latest Changes (June 19, 2025)
+
+### TFLint Compliance Fixes
+- **Fixed**: Added missing `required_version = ">= 1.9.0"` to Terraform blocks
+  - `modules/dev_center_project_pool/module.tf`
+  - `modules/dev_center_project_pool_schedule/module.tf`
+- **Fixed**: Added TFLint ignore comment for unused but documented variable
+  - `modules/dev_center_project_pool/variables.tf` - `resource_group_id` variable
+- **Result**: All modules now pass TFLint validation without warnings
+- **Type**: Code quality improvement
+- **Breaking Change**: No
+
+### Test Runner Update
+- **Fixed**: Updated `tests/run_tests.sh` to include all missing test directories
+- **Enhanced**: Made test discovery dynamic instead of hardcoded
+  - Automatically discovers unit test directories in `tests/unit/`
+  - Automatically discovers integration test directories in `tests/integration/`
+  - Validates directories contain test files (*.tftest.hcl or *.tf)
+  - Shows discovered test directories before execution
+- **Fixed**: Added proper root configuration initialization
+  - Initializes root Terraform configuration before running tests
+  - Properly handles module dependencies for tests that reference root configuration
+  - Cleans and re-initializes test directories when needed
+- **Added**: Missing unit test directories:
+  - `dev_center_project_pool`
+  - `dev_center_project_pool_schedule`
+  - `key_vault`
+- **Result**: All 9 test suites now pass (41 individual test cases)
+- **Type**: Improvement and bug fix
+- **Breaking Change**: No
+
 ## Issues Addressed
 
 1. **API Version Update**: Updated from `2025-02-01` to `2025-04-01-preview`
