@@ -6,7 +6,7 @@ variable "global_settings" {
     passthrough   = optional(bool)
     use_slug      = optional(bool)
     tags          = optional(map(string))
-    regions       = optional(map(string))
+    regions       = optional(map(string)) # Ensure downstream modules accept this field
   })
 }
 
