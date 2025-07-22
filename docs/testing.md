@@ -2,6 +2,39 @@
 
 This guide provides comprehensive information about testing the Terraform modules and configurations in the DevFactory repository.
 
+## Quick Start
+
+**New to testing in DevFactory? Start here!**
+
+### Requirements
+
+- Terraform v1.12.1 or higher
+- Azure CLI (for authentication setup)
+
+### Run All Tests
+
+```bash
+./tests/run_tests.sh
+```
+
+### Run Tests from VS Code
+
+1. Open Command Palette (⇧⌘P / Ctrl+Shift+P)
+2. Type "Tasks: Run Task"
+3. Select "Terraform: Run All Tests"
+
+### Run a Specific Module Test
+
+```bash
+# Initialize and run a specific test
+terraform -chdir=tests/unit/resource_group init
+terraform -chdir=tests/unit/resource_group test
+```
+
+**Need more details?** Continue reading the sections below for comprehensive testing information, writing new tests, and troubleshooting.
+
+---
+
 ## Testing Overview
 
 DevFactory uses Terraform's native testing functionality to verify that modules correctly create resources with expected properties and that modules work together as intended. The tests use provider mocking to avoid creating real Azure resources during testing, making them fast, reliable, and cost-effective.
