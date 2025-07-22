@@ -1,4 +1,8 @@
-# Devfactory Project - Terraform Implementation Guidelines
+---
+applyTo: '**/*.tf'
+---
+
+# DevFactory Project - Terraform Implementation Guidelines
 
 ## Quick Reference Summary
 
