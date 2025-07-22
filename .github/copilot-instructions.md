@@ -1,21 +1,57 @@
-## When writing or updating Terraform code
-Use the instructions [here](./github/instructions/devbox-tf.instructions.md) for writing/updating Terraform code.
+# DevFactory Project - General Development Guidelines
 
-## When updating code
-Document the changes made in the [CHANGELOG.md](CHANGELOG.md) file, including:
-- A brief description of the change.
-- If it is a bug fix, feature, or improvement.
-- Include assessment if this is a breaking change or not.
-## MCP Server Instructions
-If the respective MCP server exists, follow these instructions:
-- Terraform MCP Server: provides seamless integration with Terraform Registry APIs, enabling advanced automation and interaction capabilities for Infrastructure as Code (IaC) development.
-- Azure MCP Server: implements the MCP specification to create a seamless connection between AI agents and key Azure services like Azure Dev Center, Azure Dev Box, Azure Storage, Cosmos DB, and more.
+## Project Overview
 
-## Additional Instructions
-- If I tell you that you are wrong, think about whether or not you think that's true and respond with facts.
-- Avoid apologizing or making conciliatory statements.
-- It is not necessary to agree with the user with statements such as "You're right" or "Yes".
-- Avoid hyperbole and excitement, stick to the task at hand and complete it pragmatically.
-- Always ensure responses are relevant to the context of the code provided.
-- Avoid unnecessary detail and keep responses concise.
-- Revalidate before responding. Think step by step.
+DevFactory is a **modular Infrastructure as Code (IaC) project** for streamlining Azure development environment setup with consistent patterns and best practices.
+
+## **CORE RULES**
+
+### **ALWAYS** Document Changes
+**ALL CODE CHANGES** must be documented in [changelog.md](/docs/memory/changelog.md) including:
+- Brief description of the change
+- Classification: bug fix, feature, or improvement  
+- **Breaking change assessment** (YES/NO with justification)
+
+### **ALWAYS** Follow Modular Patterns
+- Consistent file structure across all modules
+- Working examples in `/examples/` directory for **EVERY** feature
+- Clear documentation in module README.md files
+- Proper input validation and testing
+
+## Communication Standards
+
+**BE DIRECT AND PRAGMATIC**:
+- Provide factual, actionable guidance
+- Avoid hyperbole and excitement - stick to technical facts
+- Think step-by-step and revalidate before responding
+- Ensure responses are relevant to the codebase context
+
+**AVOID**:
+- Unnecessary apologizing or conciliatory statements
+- Agreeing with users without factual basis ("You're right", "Yes")
+- Verbose explanations when concise answers suffice
+
+## MCP Server Integration
+
+**IF AVAILABLE**, use these Model Context Protocol servers:
+
+- **Terraform MCP Server**: Seamless integration with Terraform Registry APIs for IaC automation
+- **Azure MCP Server**: Connection to Azure services (Dev Center, Dev Box, Storage, Cosmos DB, etc.)
+
+## Quality Standards
+
+### **NEVER** Commit Without:
+- Running validation tools (formatting, linting, testing)
+- Testing examples to ensure they work  
+- Updating relevant documentation
+- Documenting changes in changelog
+
+### **ALWAYS** Ensure:
+- Changes follow established project patterns
+- New features include complete working examples
+- Security considerations (no hardcoded credentials)
+- Backward compatibility or proper breaking change documentation
+
+---
+
+**Project Goal**: Build a foundation for modern Azure development environments with high standards of quality, security, and maintainability.
