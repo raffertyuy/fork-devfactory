@@ -10,7 +10,6 @@ RULES:
 - Emphasize important rules with **bold** and ALL CAPS to ensure the LLM follows.
 
 FIRST:
-- Review the #file:README.md file to understand an overview of the project.
 - Review the objective entered by the user.
 - Review any attachments to understand the requirements and objectives further.
 

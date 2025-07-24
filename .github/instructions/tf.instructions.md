@@ -40,13 +40,6 @@ applyTo: '**/*.tf'
 
 ---
 
-## Repository Structure
-- `/modules/`: Resource-specific modules (storage, networking, compute, etc.)
-- `/examples/`: Example implementations/configurations for each module
-- `/docs/`: Project documentation and conventions
-
----
-
 ## Key Module Patterns
 - Each Azure resource type in its own module folder
 - Use dynamic blocks for optional/flexible config

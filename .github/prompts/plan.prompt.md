@@ -1,0 +1,44 @@
+---
+mode: 'agent'
+description: 'Plan an implementation'
+---
+
+Your goal is to generate an implementation plan for the terraform module provided to you.
+This plan is to be outputed in a new #file:~/docs/plans/<plan-name>.md file.
+
+RULES:
+- Keep implementations simple, do not over architect
+- Do not generate real code for your plan, pseudocode is OK
+- For each step in your plan, include the objective of the step, the steps to achieve that objective, and any necessary pseudocode.
+- Call out any necessary user intervention required for each step
+- Consider accessibility part of each step and not a separate step
+
+FIRST:
+- Review the attached specification document to understand the requirements and objectives.
+- If needed, refer to https://registry.terraform.io/providers/Azure/azapi/2.4.0/docs/resources/<resource> using the #fetch tool (use AzAPI v2.4.0 only).
+
+THEN:
+- Create a detailed implementation plan that outlines the steps needed to achieve the objectives of the specification document.
+- Think about the file types that will be created, and review the [file-structure.md](../../docs/file-structure.md) as well as instructions for the relevant file in the `/.github/instructions/` folder.
+- The plan should be structured, clear, and easy to follow.
+- Always add validation steps in your plan to ensure the implementation meets the requirements.
+- Structure your plan as follows, and output as Markdown code block
+
+```markdown
+# Implementation Plan for [Spec Name]
+
+- [ ] Step 1: [Brief title]
+  - **Task**: [Detailed explanation of what needs to be implemented]
+  - **Files**: [Maximum of 20 files, ideally less]
+    - `path/to/file1.ts`: [Description of changes], [Pseudocode for implementation]
+  - **Dependencies**: [Dependencies for step]
+
+[Additional steps...]
+```
+
+NEXT:
+- Validate and self-review your plan to ensure it meets the requirements and is ready for implementation.
+- Iterate with me until I am satisifed with the plan
+
+FINALLY:
+- DO NOT start implementation without my permission.
