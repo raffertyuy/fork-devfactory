@@ -7,13 +7,14 @@ DevFactory is a **modular Infrastructure as Code (IaC) project** for streamlinin
 ## **CORE RULES**
 
 ### File and Folder Structure
+- Use [tf.instructions.md](.github/instructions/tf.instructions.md) when creating or updating terraform `.tf` files. 
 - When you are creating new files or folders, follow the standards in #file:/docs/file-structure.md
 - If you need a reference for what each file or folder does, refer to #file:/docs/file-structure.md
 - When you create a new file in the `/` root folder or the `docs/` folder, update #file:/docs/file-structure.md with a brief decription of the file's purpose and any relevant details.
 - When you create a new folder, update #file:/docs/file-structure.md with a brief description of the folder's purpose and any relevant details.
 
 ### **ALWAYS** Document Changes
-**ALL CODE CHANGES** must be documented in #file:/changelog.md including:
+**ALL CODE CHANGES** must be documented in #file:/CHANGES_SUMMARY.md including:
 - Brief description of the change
 - Classification: bug fix, feature, or improvement  
 - **Breaking change assessment** (YES/NO with justification)
@@ -35,6 +36,11 @@ DevFactory is a **modular Infrastructure as Code (IaC) project** for streamlinin
 - Agreeing with users without factual basis ("You're right", "Yes")
 - Verbose explanations when concise answers suffice
 
+## CLI Standards
+
+- When running commands, always do so from the root of the project directory. For example, if you are running `terraform init`, run it from the root of the project directory, not from within a module or subdirectory.
+- When running commands, be mindful of the operating system as the paths and environment variables may differ. Use relative paths when possible.
+
 ## MCP Server Integration
 
 **IF AVAILABLE**, use these Model Context Protocol servers:
@@ -48,7 +54,7 @@ DevFactory is a **modular Infrastructure as Code (IaC) project** for streamlinin
 - Running validation tools (formatting, linting, testing)
 - Testing examples to ensure they work  
 - Updating relevant documentation
-- Documenting changes in #file:/changelog.md
+- Documenting changes in #file:~/CHANGES_SUMMARY.md
 
 ### **ALWAYS** Ensure:
 - Changes follow established project patterns

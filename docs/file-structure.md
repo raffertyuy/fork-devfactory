@@ -30,6 +30,7 @@ In general, for each terraform module, the following files and folders **MUST BE
   - `README.md`
 - A new `/tests/unit/<module_name>` folder containing the files used for `terraform test` (according to the testing guidelines in #file:/docs/testing.md). For example, `/tests/unit/dev_center`, which contains a `dev_center_test.tftest.hcl` file
 - A new `examples/<module_name>` folder containing an example implementation of the module. For example, `/examples/dev_center` which contains a `configuration.tfvars` file. If there are more than one example, these are separated by folder such as `/examples/dev_center/simple_case/configuraiton.tfvars` and `/examples/dev_center/enhanced_case/configuraiton.tfvars`
+- A new input.devCenterExample example option in `/.vscode/tasks.json`
 
 ## Specific Documentation
 

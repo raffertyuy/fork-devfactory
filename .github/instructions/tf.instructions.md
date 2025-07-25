@@ -6,7 +6,7 @@ applyTo: '**/*.tf'
 
 ## Quick Reference Summary
 
-- **Provider:** AzAPI v2.4.0 only
+- **Provider:** AzAPI v2.4.0 only. DO NOT use `azurerm`.
 - **Run Location:** Always from project root
 - **Sensitive Data:** Never hardcode credentials or subscription IDs
 - **Module Verification:** Always check resource arguments against latest provider docs
@@ -17,7 +17,8 @@ applyTo: '**/*.tf'
 ---
 
 ## DO
-- Use only AzAPI provider version 2.4.0
+- Use only AzAPI provider version 2.4.0.
+- Use `eastus` as the default Azure region, unless otherwise specified.
 - Place all resource modules in `/modules/` and examples in `/examples/`
 - Use dynamic blocks for optional/flexible config
 - Use nested maps and strongly-typed objects for variables
@@ -36,7 +37,8 @@ applyTo: '**/*.tf'
 - Do not use untyped or weakly-typed variables
 - Do not skip example creation for new/changed resources
 - Do not commit without running `terraform fmt` and `terraform validate`
-- Do not use provider versions other than 2.4.0
+- Do not use AzAPI provider versions other than 2.4.0.
+- DO not use the azurerm provider.
 
 ---
 
