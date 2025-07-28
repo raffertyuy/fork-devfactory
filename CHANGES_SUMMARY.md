@@ -6,6 +6,30 @@ This document summarizes the updates made to the Azure DevCenter module to imple
 
 ## Latest Changes (July 28, 2025)
 
+### Dev Center Network Connection Module - AzAPI Migration
+- **Updated**: Migrated `dev_center_network_connection` module from azurerm to azapi provider
+- **Classification**: Improvement
+- **Breaking Change**: NO - Module interface remains the same, only internal implementation changed
+- **Files Modified**:
+  - `modules/dev_center_network_connection/module.tf`: 
+    - Replaced `azurerm` provider with `azapi` provider (version ~> 2.4.0)
+    - Updated resource from `azurerm_dev_center_network_connection` to `azapi_resource`
+    - Set resource type to `Microsoft.DevCenter/networkConnections@2025-02-01`
+    - Added `azapi_client_config` data source for subscription ID
+    - Restructured properties in `body` block following Azure REST API schema
+    - Added `response_export_values = ["properties"]` for proper output handling
+  - `modules/dev_center_network_connection/output.tf`:
+    - Updated output references from `azurerm_dev_center_network_connection.this` to `azapi_resource.this`
+    - Modified property access to use `azapi_resource.this.output.properties.*` pattern
+    - Added new outputs: `provisioning_state` and `health_check_status`
+    - Updated `resource_group_name` output to reference variable (azapi doesn't expose this)
+  - `modules/dev_center_network_connection/README.md`:
+    - Updated provider requirements to reference azapi instead of azurerm
+    - Added new output descriptions for provisioning_state and health_check_status
+    - Updated resource table to reflect azapi_resource usage
+- **Testing**: All examples remain compatible as module interface is unchanged
+- **Validation**: Terraform fmt and validate pass successfully
+
 ### Dev Center Environment Type Module - Complete Implementation
 - **Created**: Full implementation of the `dev_center_environment_type` module
 - **Files Created**:

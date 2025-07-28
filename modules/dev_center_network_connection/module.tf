@@ -5,9 +5,9 @@ terraform {
       source  = "aztfmod/azurecaf"
       version = "~> 1.2.29"
     }
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 4.0"
+    azapi = {
+      source  = "Azure/azapi"
+      version = "~> 2.4.0"
     }
   }
 }
@@ -33,19 +33,36 @@ resource "azurecaf_name" "dev_center_network_connection" {
   use_slug      = var.global_settings.use_slug
 }
 
-resource "azurerm_dev_center_network_connection" "this" {
-  name                = local.network_connection_name
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  domain_join_type    = var.dev_center_network_connection.domain_join_type
-  subnet_id           = var.dev_center_network_connection.subnet_id
+resource "azapi_resource" "this" {
+  type      = "Microsoft.DevCenter/networkConnections@2025-02-01"
+  name      = local.network_connection_name
+  location  = var.location
+  parent_id = "/subscriptions/${data.azapi_client_config.current.subscription_id}/resourceGroups/${var.resource_group_name}"
 
-  domain_name       = try(var.dev_center_network_connection.domain_name, null)
-  domain_password   = try(var.dev_center_network_connection.domain_password, null)
-  domain_username   = try(var.dev_center_network_connection.domain_username, null)
-  organization_unit = try(var.dev_center_network_connection.organization_unit, null)
+  body = {
+    properties = merge(
+      {
+        domainJoinType = var.dev_center_network_connection.domain_join_type
+        subnetId       = var.dev_center_network_connection.subnet_id
+      },
+      try(var.dev_center_network_connection.networking_resource_group_name, null) != null ? {
+        networkingResourceGroupName = var.dev_center_network_connection.networking_resource_group_name
+      } : {},
+      try(var.dev_center_network_connection.domain_join.domain_name, null) != null ? {
+        domainName = var.dev_center_network_connection.domain_join.domain_name
+      } : {},
+      try(var.dev_center_network_connection.domain_join.domain_username, null) != null ? {
+        domainUsername = var.dev_center_network_connection.domain_join.domain_username
+      } : {},
+      try(var.dev_center_network_connection.domain_join.organizational_unit_path, null) != null ? {
+        organizationUnit = var.dev_center_network_connection.domain_join.organizational_unit_path
+      } : {}
+    )
+  }
 
   tags = local.tags
+
+  response_export_values = ["properties"]
 
   # Ignore changes to system-managed tags that Azure automatically adds
   lifecycle {
@@ -54,3 +71,5 @@ resource "azurerm_dev_center_network_connection" "this" {
     ]
   }
 }
+
+data "azapi_client_config" "current" {}

@@ -12,29 +12,11 @@ global_settings = {
 # Resource Group Configuration
 resource_groups = {
   "dev_center_network_connection" = {
-    name     = "example-dev-center-network-connection"
-    location = "West Europe"
+    name   = "example-dev-center-network-connection"
+    region = "eastus"
     tags = {
       Purpose = "DevCenter Network Connection Demo"
     }
-  }
-}
-
-# Virtual Network Configuration
-virtual_networks = {
-  "dev_center_vnet" = {
-    name          = "example-dev-center-vnet"
-    location      = "West Europe"
-    address_space = ["10.0.0.0/16"]
-  }
-}
-
-# Subnet Configuration
-subnets = {
-  "dev_center_subnet" = {
-    name                 = "dev-center-subnet"
-    address_prefixes     = ["10.0.1.0/24"]
-    virtual_network_name = "example-dev-center-vnet"
   }
 }
 
@@ -43,7 +25,10 @@ dev_center_network_connections = {
   "example_connection" = {
     name             = "example-network-connection"
     domain_join_type = "AzureADJoin"
-    # subnet_id will be populated at runtime
+    subnet_id        = "/subscriptions/33e81e94-c18c-4d5a-a613-897c92b35411/resourceGroups/rg-alz-connectivity/providers/Microsoft.Network/virtualNetworks/alz-hub-eastus/subnets/Sandbox"
+    resource_group = {
+      key = "dev_center_network_connection"
+    }
     tags = {
       Purpose = "Development Environment"
     }
