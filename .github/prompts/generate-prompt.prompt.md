@@ -1,17 +1,15 @@
 ---
-mode: 'edit'
+mode: 'agent'
 description: 'Generate or improve prompt files for LLMs.'
 ---
 
-Your goal is to generate or improve prompt files for LLMs based on the provided context and requirements.
-These prompt files are always written in Markdown format.
+Generate/Improve/Modify an LLM prompt file that meets the given objective.
 
 RULES:
 - Keep it simple and direct to the point.
 - Emphasize important rules with **bold** and ALL CAPS to ensure the LLM follows.
 
 FIRST:
-- Review the #file:README.md file to understand an overview of the project.
 - Review the objective entered by the user.
 - Review any attachments to understand the requirements and objectives further.
 

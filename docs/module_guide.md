@@ -83,6 +83,7 @@ dev_centers = {
     }
     tags = {
       environment = "demo"
+      module = "dev_center"
     }
   }
 }
@@ -143,41 +144,81 @@ dev_center_projects = {
 ## Dev Center Environment Type Module
 
 ### Purpose
-Creates environment types within an Azure Dev Center for defining the available environments.
+
+Creates environment types within an Azure Dev Center to define the types of environments that can be created (e.g., development, staging, production).
 
 ### Usage
+
 ```hcl
 module "dev_center_environment_types" {
   source   = "./modules/dev_center_environment_type"
   for_each = var.dev_center_environment_types
 
-  global_settings   = var.global_settings
-  environment_type  = each.value
-  dev_center_id     = lookup(each.value, "dev_center_id", null) != null ? each.value.dev_center_id : module.dev_centers[each.value.dev_center.key].id
+  global_settings  = var.global_settings
+  environment_type = each.value
+  dev_center_id    = lookup(each.value, "dev_center_id", null) != null ? each.value.dev_center_id : module.dev_centers[each.value.dev_center.key].id
 }
 ```
 
 ### Input Variables
+
 | Variable | Type | Required | Description |
 |----------|------|----------|-------------|
 | `global_settings` | `object` | Yes | Global settings for naming and prefixing |
 | `environment_type` | `object` | Yes | Environment type configuration object |
-| `dev_center_id` | `string` | Yes | The ID of the Dev Center |
+| `dev_center_id` | `string` | Yes | The ID of the parent Dev Center |
 
 ### Environment Type Configuration Options
+
 ```hcl
 dev_center_environment_types = {
-  envtype1 = {
-    name = "terraform-env"
+  development = {
+    name         = "development"
+    display_name = "Development Environment Type"
     dev_center = {
       key = "devcenter1"
     }
     tags = {
-      environment = "demo"
+      purpose     = "development"
+      team        = "engineering"
+      auto_deploy = "enabled"
+    }
+  }
+  staging = {
+    name         = "staging"
+    display_name = "Staging Environment Type"
+    dev_center = {
+      key = "devcenter1"
+    }
+    tags = {
+      purpose     = "testing"
+      team        = "qa"
+      auto_deploy = "enabled"
+    }
+  }
+  production = {
+    name         = "prod"
+    display_name = "Production Environment Type"
+    dev_center = {
+      key = "devcenter1"
+    }
+    tags = {
+      purpose     = "production"
+      team        = "ops"
+      auto_deploy = "disabled"
+      criticality = "high"
     }
   }
 }
 ```
+
+### Features
+
+- **Name Validation**: Ensures environment type names follow Azure naming conventions (3-63 characters, alphanumeric, hyphens, underscores, periods)
+- **Display Names**: Optional human-readable display names for better user experience
+- **Tagging**: Supports both global tags from `global_settings` and environment-type-specific tags
+- **Naming Conventions**: Integrates with azurecaf for consistent naming patterns
+- **Parent Dependencies**: Automatically references parent Dev Center resources
 
 ## Dev Center Project Environment Type Module
 
