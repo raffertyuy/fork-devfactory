@@ -35,8 +35,8 @@ virtual_networks = {
 # Subnet Configuration
 subnets = {
   "dev_center_subnet" = {
-    name             = "dev-center-hybrid-subnet"
-    address_prefixes = ["172.16.10.0/24"]
+    name                 = "dev-center-hybrid-subnet"
+    address_prefixes     = ["172.16.10.0/24"]
     virtual_network_name = "enhanced-dev-center-vnet"
   }
 }
@@ -44,18 +44,18 @@ subnets = {
 # Dev Center Network Connection Configuration - Hybrid Azure AD Join
 dev_center_network_connections = {
   "enhanced_hybrid_connection" = {
-    name              = "enhanced-hybrid-network-connection"
-    domain_join_type  = "HybridAzureADJoin"
+    name             = "enhanced-hybrid-network-connection"
+    domain_join_type = "HybridAzureADJoin"
     # subnet_id will be populated at runtime
-    domain_name       = "corp.contoso.local"
-    domain_username   = "svc-devcenter@corp.contoso.local"
+    domain_name     = "corp.contoso.local"
+    domain_username = "svc-devcenter@corp.contoso.local"
     # Note: In production, use Azure Key Vault for sensitive data
-    domain_password   = var.domain_password  # Pass via environment variable
+    domain_password   = var.domain_password # Pass via environment variable
     organization_unit = "OU=DevBoxes,OU=Computers,DC=corp,DC=contoso,DC=local"
     tags = {
-      Purpose     = "Production Development Environment"
-      DomainJoin  = "Hybrid"
-      Compliance  = "Required"
+      Purpose    = "Production Development Environment"
+      DomainJoin = "Hybrid"
+      Compliance = "Required"
     }
   }
 }

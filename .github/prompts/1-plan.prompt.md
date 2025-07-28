@@ -3,8 +3,7 @@ mode: 'agent'
 description: 'Plan an implementation'
 ---
 
-Your goal is to generate an implementation plan for the terraform module provided to you.
-This plan is to be outputed in a new #file:~/docs/plans/<module_name>.plan.md file.
+Your goal is to generate an implementation plan, in a new markdown .md file, for the terraform module provided to you. Create this file in `/docs/plans/<module_name>.plan.md`.
 
 ## RULES:
 - Keep implementations simple, do not over architect
@@ -20,7 +19,7 @@ This plan is to be outputed in a new #file:~/docs/plans/<module_name>.plan.md fi
 
 ### 2. THEN
 - Create a detailed implementation plan that outlines the steps needed to achieve the objectives of the specification document.
-- Think about the file types that will be created, and review the [file-structure.md](/docs/file-structure.md) as well as instructions for the relevant file in the `/.github/instructions/` folder. For example, follow the instructions in `/.github/instructions/tf.instructions.md` for `*.tf` files.
+- Think about the file types that will be created, and review the file `/docs/file-structure.md` as well as instructions for the relevant file in the `/.github/instructions/` folder. For example, follow the instructions in `/.github/instructions/tf.instructions.md` for `*.tf` files.
 - The plan should be structured, clear, and easy to follow.
 - Always add validation steps in your plan to ensure the implementation meets the requirements.
 - Structure your plan as follows, and output as Markdown code block

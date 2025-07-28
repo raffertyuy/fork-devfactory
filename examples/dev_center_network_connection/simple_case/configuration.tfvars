@@ -32,8 +32,8 @@ virtual_networks = {
 # Subnet Configuration
 subnets = {
   "dev_center_subnet" = {
-    name             = "dev-center-subnet"
-    address_prefixes = ["10.0.1.0/24"]
+    name                 = "dev-center-subnet"
+    address_prefixes     = ["10.0.1.0/24"]
     virtual_network_name = "example-dev-center-vnet"
   }
 }

@@ -22,14 +22,14 @@ variable "location" {
 variable "dev_center_network_connection" {
   description = "Configuration object for the Dev Center Network Connection"
   type = object({
-    name             = string
-    domain_join_type = string
-    subnet_id        = string
-    domain_name      = optional(string)
-    domain_password  = optional(string)
-    domain_username  = optional(string)
+    name              = string
+    domain_join_type  = string
+    subnet_id         = string
+    domain_name       = optional(string)
+    domain_password   = optional(string)
+    domain_username   = optional(string)
     organization_unit = optional(string)
-    tags             = optional(map(string))
+    tags              = optional(map(string))
   })
 
   validation {
