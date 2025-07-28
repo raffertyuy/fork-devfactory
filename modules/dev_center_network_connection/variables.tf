@@ -39,7 +39,7 @@ variable "dev_center_network_connection" {
       organizational_unit_path  = optional(string)
     }))
     networking_resource_group_name = optional(string)
-    tags                          = optional(map(string), {})
+    tags                           = optional(map(string), {})
   })
 
   validation {

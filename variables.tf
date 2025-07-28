@@ -275,13 +275,13 @@ variable "dev_center_network_connections" {
       organizational_unit_path  = optional(string)
     }))
     networking_resource_group_name = optional(string)
-    tags                          = optional(map(string), {})
+    tags                           = optional(map(string), {})
   }))
   default = {}
 
   validation {
     condition = alltrue([
-      for k, v in var.dev_center_network_connections : 
+      for k, v in var.dev_center_network_connections :
       contains(["AzureADJoin", "HybridAzureADJoin", "None"], v.domain_join_type)
     ])
     error_message = "Domain join type must be one of: AzureADJoin, HybridAzureADJoin, None."
