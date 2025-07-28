@@ -175,6 +175,8 @@ resource "azurerm_key_vault" "kv" {
 }
 ```
 
+**NOTE:** `azurerm_*` is just the resource naming convention. **DO NOT** use the `azurerm` provider. Use the `azapi` provider instead.
+
 ---
 
 ## Example Patterns
