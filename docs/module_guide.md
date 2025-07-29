@@ -397,3 +397,105 @@ dev_center_catalogs = {
   }
 }
 ```
+
+## Load Test Module
+
+### Purpose
+Creates Azure Load Testing services for high-scale load generation and application testing. Provides managed load testing infrastructure with support for identity management and customer-managed encryption.
+
+### Usage
+```hcl
+module "load_tests" {
+  source = "./modules/load_test"
+  
+  for_each = var.load_tests
+  
+  load_test           = each.value
+  location            = module.resource_groups[each.value.resource_group_key].location
+  resource_group_name = module.resource_groups[each.value.resource_group_key].name
+  global_settings     = var.global_settings
+}
+```
+
+### API Version
+- **Resource Type**: `Microsoft.LoadTestService/loadTests@2024-12-01-preview`
+- **Provider**: AzAPI v2.4.0
+
+### Input Variables
+| Variable | Type | Required | Description |
+|----------|------|----------|-------------|
+| `load_test` | `object` | Yes | Load test configuration object |
+| `location` | `string` | Yes | Azure region for the load test resource |
+| `resource_group_name` | `string` | Yes | Name of the resource group |
+| `global_settings` | `object` | Yes | Global settings for naming and tagging |
+
+### Load Test Configuration Options
+```hcl
+load_tests = {
+  # Basic load test
+  basic_test = {
+    name               = "basic-load-test"
+    resource_group_key = "loadtest_rg"
+    description        = "Basic load testing service for development"
+    tags = {
+      purpose = "load-testing"
+    }
+  }
+  
+  # Enhanced load test with identity and encryption
+  enhanced_test = {
+    name               = "enhanced-load-test"
+    resource_group_key = "loadtest_rg"
+    description        = "Production load testing with security features"
+    
+    # Managed identity configuration
+    identity = {
+      type = "SystemAssigned"
+      # For user-assigned identity:
+      # type = "UserAssigned"
+      # identity_ids = ["/subscriptions/.../identity-resource-id"]
+    }
+    
+    # Customer-managed key encryption
+    encryption = {
+      identity = {
+        type = "SystemAssigned"
+        # For user-assigned identity:
+        # type = "UserAssigned"
+        # resource_id = "/subscriptions/.../identity-resource-id"
+      }
+      key_url = "https://my-keyvault.vault.azure.net/keys/loadtest-key/version"
+    }
+    
+    tags = {
+      purpose     = "load-testing"
+      environment = "production"
+      encryption  = "enabled"
+    }
+  }
+}
+```
+
+### Features
+- **Managed Identity Support**: Both system-assigned and user-assigned identities
+- **Customer-Managed Encryption**: Integration with Azure Key Vault for encryption keys
+- **Consistent Naming**: Integration with azurecaf for standardized resource naming
+- **Comprehensive Tagging**: Support for both global and resource-specific tags
+- **Input Validation**: Strong typing and validation rules for all configuration options
+
+### Security Considerations
+- Use managed identities instead of service principals when possible
+- Enable customer-managed key encryption for sensitive workloads
+- Apply least-privilege access principles for Key Vault permissions
+- Regular review and rotation of encryption keys
+
+### Output Values
+| Output | Type | Description |
+|--------|------|-------------|
+| `load_test_id` | `string` | The resource ID of the Azure Load Test |
+| `load_test_name` | `string` | The name of the Azure Load Test |
+| `data_plane_uri` | `string` | The data plane URI for the Azure Load Test |
+| `provisioning_state` | `string` | The provisioning state of the resource |
+| `location` | `string` | The Azure region where the resource is deployed |
+| `resource_group_name` | `string` | The name of the containing resource group |
+| `tags` | `map(string)` | The tags assigned to the resource |
