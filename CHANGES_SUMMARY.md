@@ -1,4 +1,52 @@
-# Azure DevCenter Module - 2025-04-01-preview API Update
+# Azure DevFactory Changes Summary
+
+## Latest Changes (July 29, 2025)
+
+### Azure Load Test Module - Complete Implementation
+- **Created**: Full implementation of the `Azure Load Test` module
+- **Files Created**:
+  - `modules/load_test/module.tf`: Main module with AzAPI resource implementation
+  - `modules/load_test/variables.tf`: Strong typing and comprehensive validation rules
+  - `modules/load_test/output.tf`: Complete output definitions with data plane URI and provisioning state
+  - `modules/load_test/README.md`: Module documentation with usage examples and feature descriptions
+  - `load_tests.tf`: Root orchestration file for load test resources
+  - `examples/load_test/simple_case/configuration.tfvars`: Basic usage example
+  - `examples/load_test/enhanced_case/configuration.tfvars`: Advanced example with identity and encryption
+  - `tests/unit/load_test/load_test_test.tftest.hcl`: Comprehensive unit tests (4 test cases)
+- **Files Updated**:
+  - `.vscode/tasks.json`: Added load test example options to VS Code tasks
+  - `variables.tf`: Added global load_tests variable definition
+- **Description**: Complete Azure Load Testing module implementation following DevFactory patterns with AzAPI provider v2.4.0
+- **API Version**: Microsoft.LoadTestService/loadTests@2024-12-01-preview
+- **Features**: 
+  - Managed identity support (SystemAssigned, UserAssigned, or both)
+  - Customer-managed key encryption with Key Vault integration
+  - azurecaf naming convention integration
+  - Comprehensive input validation (name length, description limits, identity types)
+  - Strong typing with detailed variable structure
+  - Complete unit test coverage (4 passing tests)
+- **Validation**: 
+  - All tests pass (4/4 unit tests)
+  - Both examples plan successfully
+  - terraform validate confirms configuration is valid
+  - TFLint passes without warnings
+  - terraform fmt shows clean formatting
+- **Classification**: Feature addition
+- **Breaking Change**: No
+
+### Azure Load Test Implementation Plan
+- **Created**: Comprehensive implementation plan for `Azure Load Test` module (completed)
+- **File**: `docs/plans/load_test.plan.md`
+- **Description**: Detailed plan outlining the implementation of Azure Load Testing resources (now fully implemented)
+- **Classification**: Planning and implementation
+- **Breaking Change**: No
+
+### Documentation Updates
+- **Updated**: `docs/file_structure.md` to include Azure Load Test implementation
+- **Classification**: Documentation improvement
+- **Breaking Change**: No
+
+### Dev Center Network Connection Module - AzAPI MigrationevCenter Module - 2025-04-01-preview API Update
 
 ## Summary of Changes
 

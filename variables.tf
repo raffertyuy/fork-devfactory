@@ -360,3 +360,25 @@ variable "dev_center_project_pool_schedules" {
   }))
   default = {}
 }
+
+variable "load_tests" {
+  description = "Map of load test configurations"
+  type = map(object({
+    name               = string
+    resource_group_key = string
+    description        = optional(string)
+    identity = optional(object({
+      type         = string
+      identity_ids = optional(list(string))
+    }))
+    encryption = optional(object({
+      identity = optional(object({
+        type        = string
+        resource_id = optional(string)
+      }))
+      key_url = optional(string)
+    }))
+    tags = optional(map(string), {})
+  }))
+  default = {}
+}
