@@ -29,7 +29,7 @@ Refer to the following to better understand the implementation done before fixin
 
 ### 4. TERRAFORM APPLY (ONLY AFTER SUCCESSFUL PLAN)
 - **Prerequisites**: Step 3 (terraform plan) must be completed successfully with no errors
-- Run `terraform apply -var-file=examples/<module_name>/simple_case/configuration.tfvars` to apply the changes
+- Run `terraform apply -auto-approve -var-file=examples/<module_name>/simple_case/configuration.tfvars` to apply the changes
 - Monitor the apply process for any issues
 - **REMINDER**: This step should ONLY be executed after a successful terraform plan
 
