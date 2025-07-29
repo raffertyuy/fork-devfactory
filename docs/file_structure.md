@@ -57,7 +57,7 @@ This section contains specific files/callouts. If the file is not explained here
 
 - **conventions.md**: Comprehensive coding standards and conventions for Terraform development, including file organization, naming conventions, variable structure patterns, and best practices for consistent code across all modules.
 - **getting_started.md**: Complete setup guide including prerequisites (Terraform, Azure CLI), authentication setup, GitHub Codespaces configuration with MCP (Model Context Protocol) server support, and step-by-step deployment instructions with both VS Code tasks and command-line options.
-- **file-structure.md**: (This file) Documentation of the files and folder structure standards and overview of this workspace.
+- **file_structure.md**: (This file) Documentation of the files and folder structure standards and overview of this workspace.
 - **module_guide.md**: Detailed reference for each Terraform module including purpose, usage examples, input variables, configuration options, and inter-module relationships for Resource Groups, Dev Centers, Projects, Environment Types, Network Connections, Galleries, and Catalogs.
 - **testing.md**: Comprehensive testing guide covering Terraform's native testing functionality with provider mocking, test structure (unit vs integration), running tests via VS Code tasks or command line, writing new tests following established patterns, troubleshooting common issues, and validation procedures.
 

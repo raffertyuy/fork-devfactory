@@ -16,10 +16,10 @@ Check the files in `/.github/instructions/*.instructions.md` for any additional 
 
 
 ### File and Folder Structure
-- When you are creating new files or folders, follow the standards in #file:/docs/file-structure.md
-- If you need a reference for what each file or folder does, refer to #file:/docs/file-structure.md
-- When you create a new file in the `/` root folder or the `docs/` folder, update #file:/docs/file-structure.md with a brief decription of the file's purpose and any relevant details.
-- When you create a new folder, update #file:/docs/file-structure.md with a brief description of the folder's purpose and any relevant details.
+- When you are creating new files or folders, follow the standards in #file:/docs/file_structure.md
+- If you need a reference for what each file or folder does, refer to #file:/docs/file_structure.md
+- When you create a new file in the `/` root folder or the `docs/` folder, update #file:/docs/file_structure.md with a brief decription of the file's purpose and any relevant details.
+- When you create a new folder, update #file:/docs/file_structure.md with a brief description of the folder's purpose and any relevant details.
 
 ### **ALWAYS** Document Changes
 **ALL CODE CHANGES** must be documented in #file:/CHANGES_SUMMARY.md including:

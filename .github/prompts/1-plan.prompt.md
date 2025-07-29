@@ -1,5 +1,4 @@
 ---
-mode: 'agent'
 description: 'Plan an implementation'
 ---
 
@@ -19,7 +18,7 @@ Your goal is to generate an implementation plan, in a new markdown .md file, for
 
 ### 2. THEN
 - Create a detailed implementation plan that outlines the steps needed to achieve the objectives of the specification document.
-- Think about the file types that will be created, and review the file `/docs/file-structure.md` as well as instructions for the relevant file in the `/.github/instructions/` folder. For example, follow the instructions in `/.github/instructions/tf.instructions.md` for `*.tf` files.
+- Think about the file types that will be created, and review the file `/docs/file_structure.md` as well as instructions for the relevant file in the `/.github/instructions/` folder. For example, follow the instructions in `/.github/instructions/tf.instructions.md` for `*.tf` files.
 - The plan should be structured, clear, and easy to follow.
 - Always add validation steps in your plan to ensure the implementation meets the requirements.
 - Structure your plan as follows, and output as Markdown code block

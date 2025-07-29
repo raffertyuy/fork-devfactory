@@ -1,5 +1,4 @@
 ---
-mode: 'agent'
 description: 'Implement a plan step by step'
 ---
 Your task is to implement each step of the provided plan, one at a time.
@@ -10,7 +9,7 @@ Your task is to implement each step of the provided plan, one at a time.
 Before implementation, check the corresponding instructions in the `~/.github/instructions` folder.
 For example, follow the instructions in `~/.github/instructions/tf.instructions.md` for `*.tf` files.
 
-Refer to [file-structure.md](../../docs/file-structure.md) and check other implementations in the workspace to see how they are done. **DO NOT** make changes to the other files that you are only using for reference.
+Refer to [file_structure.md](../../docs/file_structure.md) and check other implementations in the workspace to see how they are done. **DO NOT** make changes to the other files that you are only using for reference.
 
 Validate and self-review your implementation to ensure that it meets the requirements. 
 

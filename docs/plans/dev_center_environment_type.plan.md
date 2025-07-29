@@ -110,7 +110,7 @@ This plan outlines the implementation of the `dev_center_environment_type` modul
 - [x] **Step 7: Update Documentation**
   - **Task**: Update project documentation to include environment type module information
   - **Files**:
-    - `docs/file-structure.md`: Already updated with environment type module and example locations
+    - `docs/file_structure.md`: Already updated with environment type module and example locations
     - `docs/module_guide.md`: Already updated with comprehensive environment type usage patterns and configuration options
   - **Dependencies**: Existing documentation standards
   - **Pseudocode**: Add environment type section with usage examples and configuration reference

@@ -62,7 +62,7 @@ This document summarizes the updates made to the Azure DevCenter module to imple
 - **Breaking Change**: No
 
 ### Documentation Updates
-- **Updated**: `docs/file-structure.md` to include environment type implementation plan
+- **Updated**: `docs/file_structure.md` to include environment type implementation plan
 - **Fixed**: Markdown formatting and trailing newline issues
 - **Type**: Documentation improvement
 - **Breaking Change**: No

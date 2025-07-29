@@ -1,5 +1,4 @@
 ---
-mode: 'agent'
 description: 'Test the Terraform module implementation by running `terraform plan` and `terraform apply`'
 ---
 Your task is to run `terraform plan` and then `terraform apply` on the `configuration.tfvars` of the terraform module provided to you. And then fix any issues that arise during the process. You will be working with the Terraform module located in `~/modules/<module_name>`.
