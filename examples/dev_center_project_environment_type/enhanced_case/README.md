@@ -47,20 +47,59 @@ The example includes:
 
 ## Usage
 
-1. Update the subscription IDs in `configuration.tfvars`:
-   - Replace `12345678-1234-1234-1234-123456789012` with your development subscription ID
-   - Replace `87654321-4321-4321-4321-210987654321` with your staging subscription ID
-   - Replace `11111111-2222-3333-4444-555555555555` with your production subscription ID
+1. **First, deploy the DevCenter and environment types** to get the actual generated names:
 
-2. Update the user object ID in the `user_role_assignments` section with actual Azure AD user/group object IDs
+   ```bash
+   terraform init
+   terraform plan -var-file=examples/dev_center_project_environment_type/enhanced_case/configuration.tfvars
+   ```
 
-3. Run terraform commands:
+2. **Update the environment type names** in `configuration.tfvars`:
+   - Find the actual generated environment type names from the terraform state or Azure portal
+   - Replace `corp-dcet-development-xxx` with the actual development environment type name
+   - Replace `corp-dcet-staging-xxx` with the actual staging environment type name  
+   - Replace `corp-dcet-production-xxx` with the actual production environment type name
 
-```bash
-terraform init
-terraform plan -var-file=examples/dev_center_project_environment_type/enhanced_case/configuration.tfvars
-terraform apply -var-file=examples/dev_center_project_environment_type/enhanced_case/configuration.tfvars
-```
+   **Example**: If your environment types are named:
+   - `corp-dcet-development-a1b`
+   - `corp-dcet-staging-c2d`
+   - `corp-dcet-production-e3f`
+
+   Update the configuration:
+
+   ```terraform
+   webapp_dev = {
+     environment_type_name = "corp-dcet-development-a1b"
+     # ... rest of configuration
+   }
+   ```
+
+3. **Update other settings**:
+   - All subscription IDs are set to your current subscription by default
+   - Update the user object ID in `user_role_assignments` with actual Azure AD user/group object IDs
+   - Modify subscription IDs if you want to use different subscriptions for different environments
+
+4. **Apply the configuration**:
+
+   ```bash
+   terraform apply -var-file=examples/dev_center_project_environment_type/enhanced_case/configuration.tfvars
+   ```
+
+## Environment Type Name Resolution
+
+The module supports two patterns for referencing environment types:
+
+1. **Explicit environment type name** (recommended for production):
+
+   ```terraform
+   environment_type_name = "corp-dcet-development-a1b"  # Exact name
+   ```
+
+2. **Direct name** (when you know the exact environment type name):
+
+   ```terraform
+   name = "corp-dcet-development-a1b"  # Use environment type name directly
+   ```
 
 ## Variables Configured
 

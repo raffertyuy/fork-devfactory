@@ -38,7 +38,7 @@ dev_center_projects = {
 
 dev_center_project_environment_types = {
   webapp_dev = {
-    name                 = "development"
+    name                 = "demo-dcet-development-jsm"
     project              = { key = "webapp" }
     deployment_target_id = "/subscriptions/12345678-1234-1234-1234-123456789012"
     status               = "Enabled"

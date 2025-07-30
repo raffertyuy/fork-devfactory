@@ -52,11 +52,12 @@ dev_center_projects = {
 
 dev_center_project_environment_types = {
   webapp_dev = {
-    name                 = "development"
-    project              = { key = "webapp" }
-    deployment_target_id = "/subscriptions/12345678-1234-1234-1234-123456789012"
-    status               = "Enabled"
-    display_name         = "Web App Development Environment"
+    name                    = "webapp-development"
+    environment_type_name   = "corp-dcet-development-xxx"  # Replace 'xxx' with actual random suffix
+    project                 = { key = "webapp" }
+    deployment_target_id    = "/subscriptions/12345678-1234-1234-1234-123456789012"
+    status                  = "Enabled"
+    display_name            = "Web App Development Environment"
     creator_role_assignment = {
       roles = {
         "b24988ac-6180-42a0-ab88-20f7382dd24c" = {} # Contributor
@@ -74,27 +75,30 @@ dev_center_project_environment_types = {
     }
   }
   webapp_staging = {
-    name                 = "staging"
-    project              = { key = "webapp" }
-    deployment_target_id = "/subscriptions/87654321-4321-4321-4321-210987654321"
-    status               = "Enabled"
-    display_name         = "Web App Staging Environment"
+    name                    = "webapp-staging"
+    environment_type_name   = "corp-dcet-staging-xxx"  # Replace 'xxx' with actual random suffix
+    project                 = { key = "webapp" }
+    deployment_target_id    = "/subscriptions/12345678-1234-1234-1234-123456789012"
+    status                  = "Enabled"
+    display_name            = "Web App Staging Environment"
   }
   api_dev = {
-    name                 = "development"
-    project              = { key = "api" }
-    deployment_target_id = "/subscriptions/12345678-1234-1234-1234-123456789012"
-    status               = "Enabled"
-    display_name         = "API Development Environment"
+    name                    = "api-development"
+    environment_type_name   = "corp-dcet-development-xxx"  # Replace 'xxx' with actual random suffix
+    project                 = { key = "api" }
+    deployment_target_id    = "/subscriptions/12345678-1234-1234-1234-123456789012"
+    status                  = "Enabled"
+    display_name            = "API Development Environment"
     identity = {
       type = "SystemAssigned"
     }
   }
   api_prod = {
-    name                 = "production"
-    project              = { key = "api" }
-    deployment_target_id = "/subscriptions/11111111-2222-3333-4444-555555555555"
-    status               = "Disabled" # Initially disabled for approval workflow
-    display_name         = "API Production Environment"
+    name                    = "api-production"
+    environment_type_name   = "corp-dcet-production-xxx"  # Replace 'xxx' with actual random suffix
+    project                 = { key = "api" }
+    deployment_target_id    = "/subscriptions/12345678-1234-1234-1234-123456789012"
+    status                  = "Disabled" # Initially disabled for approval workflow
+    display_name            = "API Production Environment"
   }
 }

@@ -364,10 +364,11 @@ variable "dev_center_project_pool_schedules" {
 variable "dev_center_project_environment_types" {
   description = "DevCenter Project Environment Types configuration objects"
   type = map(object({
-    name                 = string
-    deployment_target_id = string
-    status               = optional(string, "Enabled")
-    display_name         = optional(string)
+    name                    = string
+    environment_type_name   = optional(string)
+    deployment_target_id    = string
+    status                  = optional(string, "Enabled")
+    display_name            = optional(string)
     creator_role_assignment = optional(object({
       roles = map(object({}))
     }))

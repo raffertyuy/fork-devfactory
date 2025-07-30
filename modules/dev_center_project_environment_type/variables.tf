@@ -13,10 +13,11 @@ variable "global_settings" {
 variable "project_environment_type" {
   description = "Configuration for the Dev Center project environment type"
   type = object({
-    name                 = string
-    deployment_target_id = string
-    status               = optional(string, "Enabled")
-    display_name         = optional(string)
+    name                    = string
+    environment_type_name   = optional(string)
+    deployment_target_id    = string
+    status                  = optional(string, "Enabled")
+    display_name            = optional(string)
     creator_role_assignment = optional(object({
       roles = map(object({}))
     }))

@@ -17,6 +17,9 @@ locals {
     try(var.global_settings.tags, {}),
     try(var.project_environment_type.tags, {})
   )
+  
+  # Determine the correct environment type name to use
+  environment_type_name = var.project_environment_type.environment_type_name != null ? var.project_environment_type.environment_type_name : var.project_environment_type.name
 }
 
 resource "azurecaf_name" "project_environment_type" {
@@ -30,11 +33,15 @@ resource "azurecaf_name" "project_environment_type" {
 }
 
 resource "azapi_resource" "this" {
-  type      = "Microsoft.DevCenter/projects/environmentTypes@2025-04-01-preview"
-  name      = azurecaf_name.project_environment_type.result
-  parent_id = var.project_id
-  location  = var.location
-  tags      = local.tags
+  type                      = "Microsoft.DevCenter/projects/environmentTypes@2025-04-01-preview"
+  name                      = local.environment_type_name
+  parent_id                 = var.project_id
+  location                  = var.location
+  tags                      = local.tags
+  ignore_casing             = false
+  ignore_missing_property   = true
+  schema_validation_enabled = true
+  response_export_values    = ["properties"]
 
   dynamic "identity" {
     for_each = try(var.project_environment_type.identity, null) != null ? [var.project_environment_type.identity] : []
@@ -61,8 +68,6 @@ resource "azapi_resource" "this" {
       } : {}
     )
   }
-
-  response_export_values = ["properties"]
 
   # Ignore changes to system-managed tags that Azure automatically adds
   lifecycle {

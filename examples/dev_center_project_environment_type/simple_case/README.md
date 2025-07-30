@@ -30,12 +30,42 @@ The example includes:
 ## Usage
 
 1. Update the `deployment_target_id` in `configuration.tfvars` with your actual subscription ID
-2. Run terraform commands:
 
-```bash
-terraform init
-terraform plan -var-file=examples/dev_center_project_environment_type/simple_case/configuration.tfvars
-terraform apply -var-file=examples/dev_center_project_environment_type/simple_case/configuration.tfvars
+2. **Important**: The configuration uses the exact environment type name that matches the DevCenter environment type. In this example, both the DevCenter environment type and project environment type use `"demo-dcet-development-jsm"` as the name.
+
+3. Run terraform commands:
+
+   ```bash
+   terraform init
+   terraform plan -var-file=examples/dev_center_project_environment_type/simple_case/configuration.tfvars
+   terraform apply -var-file=examples/dev_center_project_environment_type/simple_case/configuration.tfvars
+   ```
+
+## Environment Type Name Pattern
+
+This example demonstrates the **direct name** pattern where the project environment type uses the exact DevCenter environment type name:
+
+```terraform
+dev_center_project_environment_types = {
+  webapp_dev = {
+    name = "demo-dcet-development-jsm"  # Must match the DevCenter environment type name
+    project = { key = "webapp" }
+    deployment_target_id = "/subscriptions/..."
+  }
+}
+```
+
+**Alternative pattern** using explicit environment_type_name:
+
+```terraform
+dev_center_project_environment_types = {
+  webapp_dev = {
+    name = "my-custom-reference-name"
+    environment_type_name = "demo-dcet-development-jsm"  # Exact DevCenter env type name
+    project = { key = "webapp" }
+    deployment_target_id = "/subscriptions/..."
+  }
+}
 ```
 
 ## Variables Configured

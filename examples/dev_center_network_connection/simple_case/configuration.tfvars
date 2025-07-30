@@ -25,7 +25,7 @@ dev_center_network_connections = {
   "example_connection" = {
     name             = "example-network-connection"
     domain_join_type = "AzureADJoin"
-    subnet_id        = "/subscriptions/33e81e94-c18c-4d5a-a613-897c92b35411/resourceGroups/rg-alz-connectivity/providers/Microsoft.Network/virtualNetworks/alz-hub-eastus/subnets/Sandbox"
+    subnet_id        = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/rg-alz-connectivity/providers/Microsoft.Network/virtualNetworks/alz-hub-eastus/subnets/Sandbox"
     resource_group = {
       key = "dev_center_network_connection"
     }

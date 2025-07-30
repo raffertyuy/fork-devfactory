@@ -6,6 +6,24 @@ This document summarizes the updates made to the Azure DevCenter module to imple
 
 ## Latest Changes (July 30, 2025)
 
+### Dev Center Project Environment Type Module - Variable Reference Fix Applied to Examples
+- **Fixed**: Variable reference issue in both simple_case and enhanced_case examples
+- **Root Cause**: Missing `environment_type_name` field in root variable definition
+- **Files Updated**:
+  - `variables.tf`: Added `environment_type_name = optional(string)` to root variable definition
+  - `modules/dev_center_project_environment_type/module.tf`: Updated name resolution logic using conditional logic
+  - `examples/dev_center_project_environment_type/simple_case/configuration.tfvars`: Updated to use correct environment type name
+  - `examples/dev_center_project_environment_type/enhanced_case/configuration.tfvars`: Updated with `environment_type_name` pattern and corrected subscription IDs
+  - `examples/dev_center_project_environment_type/simple_case/README.md`: Updated documentation with usage patterns
+  - `examples/dev_center_project_environment_type/enhanced_case/README.md`: Updated with comprehensive usage instructions
+- **Solution**: Module now supports two patterns:
+  1. **Explicit environment type name**: `environment_type_name = "exact-env-type-name"`
+  2. **Direct name**: `name = "exact-env-type-name"` (when you know the exact environment type name)
+- **Logic**: `local.environment_type_name = var.project_environment_type.environment_type_name != null ? var.project_environment_type.environment_type_name : var.project_environment_type.name`
+- **Validation**: Both simple and enhanced examples validate correctly and show expected plans
+- **Type**: Bug fix and improvement
+- **Breaking Change**: No - maintains backward compatibility
+
 ### Dev Center Project Environment Type Module - Complete Implementation
 - **Created**: Full implementation of the `dev_center_project_environment_type` module
 - **Files Created**:

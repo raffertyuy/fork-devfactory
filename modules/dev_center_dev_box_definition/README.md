@@ -750,7 +750,7 @@ image_reference_id = "/subscriptions/subscription-id/resourceGroups/rg-shared-im
 This will automatically become:
 
 ```hcl
-"/subscriptions/33e81e94-c18c-4d5a-a613-897c92b35411/resourceGroups/rg-shared-images/providers/Microsoft.Compute/galleries/gallery1/images/win11-dev/versions/latest"
+"/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/rg-shared-images/providers/Microsoft.Compute/galleries/gallery1/images/win11-dev/versions/latest"
 ```
 
 This feature makes configurations portable across different Azure subscriptions without manual modification.
