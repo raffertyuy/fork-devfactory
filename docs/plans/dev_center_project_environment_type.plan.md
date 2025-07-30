@@ -6,11 +6,11 @@ This implementation plan covers the creation of a complete Terraform module for 
 
 Dev Center Project Environment Types establish the relationship between a DevCenter project and environment types that can be used within that project. This is different from the DevCenter-level environment types which define the global environment types available across the DevCenter. Project environment types configure how those global environment types are used within specific projects, including deployment target subscriptions, role assignments, and status configuration.
 
-**Key Resource**: `Microsoft.DevCenter/projects/environmentTypes@2025-07-01-preview`
+**Key Resource**: `Microsoft.DevCenter/projects/environmentTypes@2025-04-01-preview`
 
 ## Implementation Steps
 
-- [ ] **Step 1: Create Module Structure**
+- [x] **Step 1: Create Module Structure**
   - **Task**: Set up the module directory structure and base Terraform configuration files following DevFactory patterns
   - **Files**:
     - `modules/dev_center_project_environment_type/module.tf`: Main module implementation with AzAPI resource
@@ -19,7 +19,7 @@ Dev Center Project Environment Types establish the relationship between a DevCen
     - `modules/dev_center_project_environment_type/README.md`: Module documentation with usage examples
   - **Dependencies**: None - foundation step
 
-- [ ] **Step 2: Implement Module Logic**
+- [x] **Step 2: Implement Module Logic**
   - **Task**: Create the core module implementation using AzAPI provider with support for all project environment type properties
   - **Files**:
     - `modules/dev_center_project_environment_type/module.tf`:
@@ -51,7 +51,7 @@ Dev Center Project Environment Types establish the relationship between a DevCen
       }
 
       resource "azapi_resource" "project_environment_type" {
-        type      = "Microsoft.DevCenter/projects/environmentTypes@2025-07-01-preview"
+        type      = "Microsoft.DevCenter/projects/environmentTypes@2025-04-01-preview"
         name      = azurecaf_name.project_environment_type.result
         parent_id = var.project_id
         location  = var.location
@@ -91,7 +91,7 @@ Dev Center Project Environment Types establish the relationship between a DevCen
     - `modules/dev_center_project_environment_type/output.tf`: Resource outputs for integration
   - **Dependencies**: Step 1 completion
 
-- [ ] **Step 3: Define Variable Structure**
+- [x] **Step 3: Define Variable Structure**
   - **Task**: Create comprehensive variable definitions with proper validation and typing
   - **Files**:
     - `modules/dev_center_project_environment_type/variables.tf`:
@@ -151,7 +151,7 @@ Dev Center Project Environment Types establish the relationship between a DevCen
       ```
   - **Dependencies**: Step 2 completion
 
-- [ ] **Step 4: Define Output Structure**
+- [x] **Step 4: Define Output Structure**
   - **Task**: Create comprehensive outputs for resource integration and monitoring
   - **Files**:
     - `modules/dev_center_project_environment_type/output.tf`:
@@ -208,7 +208,7 @@ Dev Center Project Environment Types establish the relationship between a DevCen
       ```
   - **Dependencies**: Step 3 completion
 
-- [ ] **Step 5: Create Root Orchestration**
+- [x] **Step 5: Create Root Orchestration**
   - **Task**: Create root-level Terraform file to orchestrate the module instances
   - **Files**:
     - `dev_center_project_environment_types.tf`:
@@ -226,7 +226,7 @@ Dev Center Project Environment Types establish the relationship between a DevCen
       ```
   - **Dependencies**: Step 4 completion
 
-- [ ] **Step 6: Create Simple Example**
+- [x] **Step 6: Create Simple Example**
   - **Task**: Create a basic example demonstrating simple project environment type configuration
   - **Files**:
     - `examples/dev_center_project_environment_type/simple_case/configuration.tfvars`:
@@ -281,7 +281,7 @@ Dev Center Project Environment Types establish the relationship between a DevCen
     - `examples/dev_center_project_environment_type/simple_case/README.md`: Example documentation
   - **Dependencies**: Step 5 completion
 
-- [ ] **Step 7: Create Enhanced Example**
+- [x] **Step 7: Create Enhanced Example**
   - **Task**: Create advanced example with role assignments and multiple environment types
   - **Files**:
     - `examples/dev_center_project_environment_type/enhanced_case/configuration.tfvars`:
@@ -390,7 +390,7 @@ Dev Center Project Environment Types establish the relationship between a DevCen
     - `examples/dev_center_project_environment_type/enhanced_case/README.md`: Enhanced example documentation
   - **Dependencies**: Step 6 completion
 
-- [ ] **Step 8: Create Unit Tests**
+- [x] **Step 8: Create Unit Tests**
   - **Task**: Implement comprehensive unit tests using Terraform's native testing framework
   - **Files**:
     - `tests/unit/dev_center_project_environment_type/project_environment_type_test.tftest.hcl`:
@@ -485,7 +485,7 @@ Dev Center Project Environment Types establish the relationship between a DevCen
       ```
   - **Dependencies**: Step 7 completion
 
-- [ ] **Step 9: Update VS Code Tasks**
+- [x] **Step 9: Update VS Code Tasks**
   - **Task**: Add new example options to VS Code tasks for easy testing
   - **Files**:
     - `.vscode/tasks.json`: Add project environment type example inputs:
@@ -508,7 +508,7 @@ Dev Center Project Environment Types establish the relationship between a DevCen
       ```
   - **Dependencies**: Step 8 completion
 
-- [ ] **Step 10: Update Documentation**
+- [x] **Step 10: Update Documentation**
   - **Task**: Update project documentation to include the new module
   - **Files**:
     - `docs/file_structure.md`: Add project environment type entries

@@ -223,7 +223,7 @@ dev_center_environment_types = {
 ## Dev Center Project Environment Type Module
 
 ### Purpose
-Links environment types to projects within an Azure Dev Center.
+Associates DevCenter environment types with specific projects, configuring deployment targets, role assignments, and access control.
 
 ### Usage
 ```hcl
@@ -233,38 +233,60 @@ module "dev_center_project_environment_types" {
 
   global_settings          = var.global_settings
   project_environment_type = each.value
-  location                 = lookup(each.value, "location", null) != null ? each.value.location : module.resource_groups[each.value.resource_group.key].location
-  dev_center_project_id    = lookup(each.value, "dev_center_project_id", null) != null ? each.value.dev_center_project_id : module.dev_center_projects[each.value.project.key].id
-  deployment_target_id     = each.value.deployment_target_id
+  project_id              = lookup(each.value, "project_id", null) != null ? each.value.project_id : module.dev_center_projects[each.value.project.key].id
+  location                = lookup(each.value, "region", null) != null ? each.value.region : "eastus"
 }
 ```
 
 ### Input Variables
 | Variable | Type | Required | Description |
 |----------|------|----------|-------------|
-| `global_settings` | `object` | Yes | Global settings for naming and prefixing |
+| `global_settings` | `object` | Yes | Global settings for naming and tagging |
 | `project_environment_type` | `object` | Yes | Project environment type configuration object |
+| `project_id` | `string` | Yes | The resource ID of the DevCenter project |
 | `location` | `string` | Yes | Azure region for deployment |
-| `dev_center_project_id` | `string` | Yes | The ID of the project |
-| `deployment_target_id` | `string` | Yes | The ID of the deployment target |
 
 ### Project Environment Type Configuration Options
 ```hcl
 dev_center_project_environment_types = {
-  projenvtype1 = {
-    name = "terraform-env"
-    project = {
-      key = "project1"
+  webapp_dev = {
+    name = "development"
+    project = { key = "webapp" }
+    deployment_target_id = "/subscriptions/12345678-1234-1234-1234-123456789012"
+    status = "Enabled"
+    display_name = "Web App Development Environment"
+    creator_role_assignment = {
+      roles = {
+        "b24988ac-6180-42a0-ab88-20f7382dd24c" = {} # Contributor
+      }
     }
-    environment_type = {
-      key = "envtype1"
+    user_role_assignments = {
+      "11111111-1111-1111-1111-111111111111" = {
+        roles = {
+          "acdd72a7-3385-48ef-bd42-f606fba81ae7" = {} # Reader
+        }
+      }
+    }
+    identity = {
+      type = "SystemAssigned"
     }
     tags = {
-      environment = "demo"
+      purpose = "web-development"
     }
   }
 }
 ```
+
+### Configuration Properties
+
+- **name**: (Required) Name of the environment type within the project
+- **deployment_target_id**: (Required) Subscription ID where environments will be deployed
+- **status**: (Optional) "Enabled" or "Disabled" - controls availability
+- **display_name**: (Optional) User-friendly display name
+- **creator_role_assignment**: (Optional) Roles for environment creators
+- **user_role_assignments**: (Optional) Roles for specific users/groups
+- **identity**: (Optional) Managed identity configuration
+- **tags**: (Optional) Resource-specific tags
 
 ## Dev Center Network Connection Module
 

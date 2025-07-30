@@ -360,3 +360,46 @@ variable "dev_center_project_pool_schedules" {
   }))
   default = {}
 }
+
+variable "dev_center_project_environment_types" {
+  description = "DevCenter Project Environment Types configuration objects"
+  type = map(object({
+    name                 = string
+    deployment_target_id = string
+    status               = optional(string, "Enabled")
+    display_name         = optional(string)
+    creator_role_assignment = optional(object({
+      roles = map(object({}))
+    }))
+    user_role_assignments = optional(map(object({
+      roles = map(object({}))
+    })))
+    identity = optional(object({
+      type         = string
+      identity_ids = optional(list(string), [])
+    }))
+    project_id = optional(string)
+    project = optional(object({
+      key = string
+    }))
+    region = optional(string)
+    tags   = optional(map(string), {})
+  }))
+  default = {}
+
+  validation {
+    condition = alltrue([
+      for pet_key, pet in var.dev_center_project_environment_types :
+      can(regex("^[a-zA-Z0-9][a-zA-Z0-9-_.]{2,62}$", pet.name))
+    ])
+    error_message = "Environment type names must be 3-63 characters, start with alphanumeric, and contain only alphanumeric, hyphens, underscores, and periods."
+  }
+
+  validation {
+    condition = alltrue([
+      for pet_key, pet in var.dev_center_project_environment_types :
+      contains(["Enabled", "Disabled"], try(pet.status, "Enabled"))
+    ])
+    error_message = "Status must be either 'Enabled' or 'Disabled' for all project environment types."
+  }
+}
