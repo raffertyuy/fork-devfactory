@@ -4,7 +4,70 @@
 
 This document summarizes the updates made to the Azure DevCenter module to implement the 2025-04-01-preview API version and fix the identity block placement.
 
-## Latest Changes (June 19, 2025)
+## Latest Changes (July 28, 2025)
+
+### Dev Center Network Connection Module - AzAPI Migration
+- **Updated**: Migrated `dev_center_network_connection` module from azurerm to azapi provider
+- **Classification**: Improvement
+- **Breaking Change**: NO - Module interface remains the same, only internal implementation changed
+- **Files Modified**:
+  - `modules/dev_center_network_connection/module.tf`: 
+    - Replaced `azurerm` provider with `azapi` provider (version ~> 2.4.0)
+    - Updated resource from `azurerm_dev_center_network_connection` to `azapi_resource`
+    - Set resource type to `Microsoft.DevCenter/networkConnections@2025-02-01`
+    - Added `azapi_client_config` data source for subscription ID
+    - Restructured properties in `body` block following Azure REST API schema
+    - Added `response_export_values = ["properties"]` for proper output handling
+  - `modules/dev_center_network_connection/output.tf`:
+    - Updated output references from `azurerm_dev_center_network_connection.this` to `azapi_resource.this`
+    - Modified property access to use `azapi_resource.this.output.properties.*` pattern
+    - Added new outputs: `provisioning_state` and `health_check_status`
+    - Updated `resource_group_name` output to reference variable (azapi doesn't expose this)
+  - `modules/dev_center_network_connection/README.md`:
+    - Updated provider requirements to reference azapi instead of azurerm
+    - Added new output descriptions for provisioning_state and health_check_status
+    - Updated resource table to reflect azapi_resource usage
+- **Testing**: All examples remain compatible as module interface is unchanged
+- **Validation**: Terraform fmt and validate pass successfully
+
+### Dev Center Environment Type Module - Complete Implementation
+- **Created**: Full implementation of the `dev_center_environment_type` module
+- **Files Created**:
+  - `modules/dev_center_environment_type/module.tf`: Main module with AzAPI resource implementation
+  - `modules/dev_center_environment_type/variables.tf`: Strong typing and validation rules
+  - `modules/dev_center_environment_type/output.tf`: Comprehensive output definitions
+  - `modules/dev_center_environment_type/README.md`: Module documentation and usage examples
+  - `dev_center_environment_types.tf`: Root orchestration file
+  - `examples/dev_center_environment_type/simple_case/configuration.tfvars`: Basic example
+  - `examples/dev_center_environment_type/enhanced_case/configuration.tfvars`: Advanced example with multiple environment types
+  - `examples/dev_center_environment_type/simple_case/README.md`: Example documentation
+  - `tests/unit/dev_center_environment_type/environment_type_test.tftest.hcl`: Comprehensive unit tests
+- **Files Updated**:
+  - `.vscode/tasks.json`: Added environment type example options to VS Code tasks
+- **Description**: Complete environment type module implementation following DevFactory patterns with AzAPI provider v2.4.0
+- **API Version**: Microsoft.DevCenter/devcenters/environmentTypes@2025-04-01-preview
+- **Features**: Name validation, display names, tagging support, azurecaf naming integration
+- **Validation**: All tests pass, terraform validate successful, example configurations verified
+- **Type**: Feature addition
+- **Breaking Change**: No
+
+### Dev Center Environment Type Implementation Plan
+- **Created**: Implementation plan for `dev_center_environment_type` module
+- **File**: `docs/plans/dev_center_environment_type.plan.md`
+- **Description**: Comprehensive plan outlining the implementation of environment type resources for Dev Centers (now completed)
+- **Scope**: Module creation, root orchestration, examples, unit tests, integration tests, and documentation
+- **API Version**: Microsoft.DevCenter/devcenters/environmentTypes@2025-04-01-preview
+- **Pattern**: Follows established DevFactory modular patterns with AzAPI provider v2.4.0
+- **Type**: Feature addition and planning
+- **Breaking Change**: No
+
+### Documentation Updates
+- **Updated**: `docs/file_structure.md` to include environment type implementation plan
+- **Fixed**: Markdown formatting and trailing newline issues
+- **Type**: Documentation improvement
+- **Breaking Change**: No
+
+## Previous Changes (June 19, 2025)
 
 ### Merge Conflict Resolution
 - **Fixed**: Resolved merge conflicts in PR #24 (devboxpools branch)

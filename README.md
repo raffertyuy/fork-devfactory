@@ -111,30 +111,7 @@ For more complex scenarios, check out the examples in the `examples` directory. 
 
 ## Testing
 
-DevFactory includes a comprehensive test suite to validate all modules:
-
-- **Unit Tests**: Test individual modules in isolation
-- **Integration Tests**: Test the interaction between multiple modules
-
-### Running Tests
-
-You can run tests using the provided scripts:
-
-```bash
-# Run all tests
-./tests/run_tests.sh
-
-# Run a specific test
-./tests/run_test.sh resource_group
-
-# Run a specific test with verbose output
-./tests/run_test.sh --verbose dev_center
-
-# Run a specific test run block
-./tests/run_test.sh --run test_basic_project project
-```
-
-For more details on testing, see the [Testing Guide](docs/testing.md).
+DevFactory includes a comprehensive test suite with unit and integration tests to validate all modules. For detailed testing instructions, including how to run tests, write new tests, and troubleshoot common issues, see the [Testing Guide](docs/testing.md).
 
 ## Contributing
 

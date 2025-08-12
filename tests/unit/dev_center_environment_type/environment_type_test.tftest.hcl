@@ -30,15 +30,29 @@ variables {
   }
 
   dev_center_environment_types = {
-    envtype1 = {
-      name         = "test-environment-type"
-      display_name = "Test Environment Type Display Name"
+    // Basic environment type
+    development = {
+      name         = "development"
+      display_name = "Development Environment Type"
       dev_center = {
         key = "devcenter1"
       }
       tags = {
         environment = "test"
         module      = "dev_center_environment_type"
+        purpose     = "development"
+      }
+    }
+    // Environment type without display name
+    staging = {
+      name = "staging"
+      dev_center = {
+        key = "devcenter1"
+      }
+      tags = {
+        environment = "test"
+        module      = "dev_center_environment_type"
+        purpose     = "staging"
       }
     }
   }
@@ -65,61 +79,108 @@ mock_provider "azapi" {
 
 mock_provider "azurecaf" {}
 
-// Test for basic environment type
-run "test_basic_environment_type" {
+// Test for basic environment type with display name
+run "test_environment_type_with_display_name" {
   command = plan
 
-  module {
-    source = "../../../"
+  providers = {
+    azapi    = azapi
+    azurecaf = azurecaf
   }
-
-  assert {
-    condition     = module.dev_center_environment_types["envtype1"] != null
-    error_message = "Environment type should exist"
-  }
-}
-
-// Test for environment type with custom configuration
-run "test_custom_environment_type" {
-  command = plan
 
   variables {
+    // Override with only the development environment type
     dev_center_environment_types = {
-      custom_env = {
-        name         = "custom-environment-type"
-        display_name = "Custom Environment Type"
+      development = {
+        name         = "development"
+        display_name = "Development Environment Type"
         dev_center = {
           key = "devcenter1"
         }
         tags = {
-          environment = "staging"
-          purpose     = "testing"
-          owner       = "dev-team"
+          environment = "test"
+          module      = "dev_center_environment_type"
+          purpose     = "development"
         }
       }
     }
   }
 
-  module {
-    source = "../../../"
+  module { source = "../../../" }
+
+  assert {
+    condition     = module.dev_center_environment_types["development"] != null
+    error_message = "Development environment type module should exist"
   }
 
   assert {
-    condition     = module.dev_center_environment_types["custom_env"] != null
-    error_message = "Custom environment type should exist"
+    condition     = length(keys(module.dev_center_environment_types)) == 1
+    error_message = "Should only have one environment type (development)"
   }
 }
 
-// Apply test for environment types
-run "test_apply_environment_type" {
+// Test for environment type without display name
+run "test_environment_type_without_display_name" {
   command = plan
 
-  module {
-    source = "../../../"
+  providers = {
+    azapi    = azapi
+    azurecaf = azurecaf
+  }
+
+  variables {
+    // Override with only the staging environment type
+    dev_center_environment_types = {
+      staging = {
+        name = "staging"
+        dev_center = {
+          key = "devcenter1"
+        }
+        tags = {
+          environment = "test"
+          module      = "dev_center_environment_type"
+          purpose     = "staging"
+        }
+      }
+    }
+  }
+
+  module { source = "../../../" }
+
+  assert {
+    condition     = module.dev_center_environment_types["staging"] != null
+    error_message = "Staging environment type module should exist"
   }
 
   assert {
-    condition     = module.dev_center_environment_types["envtype1"] != null
-    error_message = "Environment type should exist after apply"
+    condition     = length(keys(module.dev_center_environment_types)) == 1
+    error_message = "Should only have one environment type (staging)"
+  }
+}
+
+// Test for multiple environment types
+run "test_multiple_environment_types" {
+  command = plan
+
+  providers = {
+    azapi    = azapi
+    azurecaf = azurecaf
+  }
+
+  module { source = "../../../" }
+
+  assert {
+    condition     = module.dev_center_environment_types["development"] != null
+    error_message = "Development environment type module should exist"
+  }
+
+  assert {
+    condition     = module.dev_center_environment_types["staging"] != null
+    error_message = "Staging environment type module should exist"
+  }
+
+  assert {
+    condition     = length(keys(module.dev_center_environment_types)) == 2
+    error_message = "Should have two environment types (development and staging)"
   }
 }

@@ -25,16 +25,26 @@ variable "dev_center_network_connection" {
     name             = string
     domain_join_type = string
     subnet_id        = string
-    domain_name      = optional(string)
-    domain_password  = optional(string)
-    domain_username  = optional(string)
-    organization_unit = optional(string)
-    tags             = optional(map(string))
+    dev_center_id    = optional(string)
+    dev_center = optional(object({
+      key = string
+    }))
+    resource_group = optional(object({
+      key = string
+    }))
+    domain_join = optional(object({
+      domain_name               = string
+      domain_password_secret_id = optional(string)
+      domain_username           = string
+      organizational_unit_path  = optional(string)
+    }))
+    networking_resource_group_name = optional(string)
+    tags                           = optional(map(string), {})
   })
 
   validation {
-    condition     = contains(["AzureADJoin", "HybridAzureADJoin"], var.dev_center_network_connection.domain_join_type)
-    error_message = "Domain join type must be either 'AzureADJoin' or 'HybridAzureADJoin'."
+    condition     = contains(["AzureADJoin", "HybridAzureADJoin", "None"], var.dev_center_network_connection.domain_join_type)
+    error_message = "Domain join type must be one of: AzureADJoin, HybridAzureADJoin, None."
   }
 
   validation {

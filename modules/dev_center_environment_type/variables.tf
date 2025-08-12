@@ -1,33 +1,22 @@
 variable "global_settings" {
   description = "Global settings object"
   type = object({
-    prefixes      = list(string)
-    random_length = number
-    passthrough   = bool
-    use_slug      = bool
+    prefixes      = optional(list(string))
+    random_length = optional(number)
+    passthrough   = optional(bool)
+    use_slug      = optional(bool)
+    tags          = optional(map(string))
   })
-  validation {
-    condition = (
-      length(var.global_settings.prefixes) > 0 &&
-      var.global_settings.random_length >= 0
-    )
-    error_message = "global_settings must have valid prefixes and random_length >= 0."
-  }
 }
 
 variable "dev_center_id" {
-  description = "The ID of the Dev Center in which to create the environment type"
+  description = "The ID of the Dev Center that will contain the environment type"
   type        = string
-  validation {
-    condition     = length(var.dev_center_id) > 0
-    error_message = "dev_center_id must be a non-empty string."
-  }
-}
 
-variable "tags" {
-  description = "Optional tags to apply to the environment type. Merged with global and resource-specific tags."
-  type        = map(string)
-  default     = {}
+  validation {
+    condition     = can(regex("^/subscriptions/[0-9a-f-]+/resourceGroups/[^/]+/providers/Microsoft\\.DevCenter/devcenters/[^/]+$", var.dev_center_id))
+    error_message = "Dev Center ID must be a valid Azure resource ID for a Dev Center."
+  }
 }
 
 variable "environment_type" {
@@ -37,13 +26,9 @@ variable "environment_type" {
     display_name = optional(string)
     tags         = optional(map(string))
   })
-  validation {
-    condition     = length(var.environment_type.name) > 0
-    error_message = "environment_type.name must be a non-empty string."
-  }
 
   validation {
-    condition     = can(regex("^[a-zA-Z0-9][a-zA-Z0-9-_.]{2,62}$", var.environment_type.name))
-    error_message = "environment_type.name must be 3-63 characters long, and can only contain alphanumeric characters, hyphens, underscores, or periods. The name must start with a letter or number."
+    condition     = can(regex("^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]$", var.environment_type.name)) && length(var.environment_type.name) >= 3 && length(var.environment_type.name) <= 128
+    error_message = "Environment type name must be between 3 and 128 characters long and can contain alphanumeric characters, periods, hyphens, and underscores. It must start and end with an alphanumeric character."
   }
 }

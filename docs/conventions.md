@@ -13,7 +13,7 @@ Each resource module follows a consistent file structure:
 ### Naming Conventions
 
 1. **Resource Naming**
-   - All resources use the Azure CAF naming module for consistent naming
+   - All resources use the Azure CAF naming module for consistent naming. **IMPORTANT: This includes prefixing names with "azurerm_".**
    - Standard prefixes are applied through global settings
    - Resources are named using a combination of prefixes, resource type, and custom name
 
@@ -161,3 +161,5 @@ resource "azurerm_child_resource" "resource" {
 8. **Validate inputs** using variable type constraints
 9. **Use consistent output patterns** across modules
 10. **Apply tags consistently** to all resources
+
+**NOTE:** `azurerm_*` is just the resource naming convention. **DO NOT** use the `azurerm` provider. Use the `azapi` provider instead.

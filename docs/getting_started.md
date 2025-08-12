@@ -110,11 +110,38 @@ az account show --query "[name,id]" -o tsv
 
 Note: We use environment variables for the subscription ID instead of including it in configuration files. This approach is more secure and follows infrastructure-as-code best practices. The VS Code tasks in this project will automatically handle exporting the subscription ID for you.
 
-### 3. Choose How to Run Terraform Commands
+### 3. AI-Assisted Module Development with Copilot Prompts (Recommended)
+
+The project includes specialized copilot prompts for AI-assisted development of Terraform modules. This approach enables "vibe coding" - intuitive module implementation through 3 easy steps:
+
+**Prerequisites:**
+- Ensure the Azure and Terraform MCP servers are running
+- Best used with the `aztf-agent` chat mode for optimal results
+
+**The 3-Step Workflow:**
+
+1. **`/1-plan`** - Plan your Terraform module implementation
+   - Reusable prompt located at: `/.github/prompts/1-plan.prompt.md`
+   - Analyzes requirements and designs module structure
+
+2. **`/2-implement`** - Implement the Terraform module code
+   - Reusable prompt located at: `/.github/prompts/2-implement.prompt.md`
+   - Generates module files, variables, outputs, and documentation
+
+3. **`/3-apply`** - Apply and test the module implementation
+   - Reusable prompt located at: `/.github/prompts/3-apply.prompt.md`
+   - Creates examples and validates the module functionality
+
+This AI-assisted approach leverages the MCP integrations to provide intelligent guidance throughout the module development process, making it easier to create well-structured, documented Terraform modules for Azure resources.
+
+### 4. Choose How to Run Terraform Commands
+
+> [!NOTE]
+> This is only necessary if you skipped `/3-apply` above.
 
 You have two options for running Terraform commands:
 
-#### Option 1: Using VS Code Tasks (Recommended)
+#### Option 1: Using VS Code Tasks
 
 The project includes predefined VS Code tasks for easy execution:
 
@@ -151,7 +178,7 @@ Each example includes:
 - Resource-specific configurations
 - Parent-child resource relationships where needed
 
-### 4. Apply the Configuration
+### 5. Apply the Configuration
 
 After reviewing the plan, apply it:
 
@@ -159,7 +186,7 @@ After reviewing the plan, apply it:
 terraform apply -var-file=examples/resource_group/simple_case/configuration.tfvars
 ```
 
-### 5. Clean Up Resources
+### 6. Clean Up Resources
 
 When you're done, you can remove all created resources using either VS Code tasks or the command line:
 

@@ -1,153 +1,489 @@
 # Testing Guide for DevFactory
 
-This document describes how to run tests in the DevFactory project.
+This guide provides comprehensive information about testing the Terraform modules and configurations in the DevFactory repository.
 
-## Test Structure
+## Quick Start
 
-The DevFactory project uses Terraform's built-in testing framework. Tests are organized as follows:
+**New to testing in DevFactory? Start here!**
 
-```
-tests/
-├── integration/             # Integration tests that test multiple modules together
-│   └── dev_center_integration_test.tftest.hcl
-└── unit/                    # Unit tests for individual modules
-    ├── dev_center/
-    │   └── dev_centers_test.tftest.hcl
-    ├── dev_center_environment_type/
-    │   └── environment_type_test.tftest.hcl
-    ├── dev_center_project/
-    │   └── project_test.tftest.hcl
-    └── resource_group/
-        └── resource_group_test.tftest.hcl
-```
+### Requirements
 
-## Test Types
+- **Terraform v1.12.1 or higher**
+- **Azure CLI** (for authentication setup)
 
-### Unit Tests
-
-Unit tests validate individual modules in isolation:
-
-- **Resource Group**: Tests basic resource group creation and custom tags
-- **Dev Center**: Tests various identity configurations (System, User, and combined)
-- **Environment Type**: Tests environment type creation with various configurations
-- **Project**: Tests project creation with basic and custom properties
-
-### Integration Tests
-
-Integration tests validate the interaction between multiple modules, ensuring they work together correctly.
-
-## Running Tests
-
-### Prerequisites
-
-- Terraform v1.12.1 or higher
-- Provider configurations for Azure and AzureCAF
-
-### Running Tests
-
-#### Using Command Line
-
-To run all tests in the repository, use the provided script:
+### Run All Tests
 
 ```bash
 ./tests/run_tests.sh
 ```
 
-This script will run all tests in the repository and display the results.
+### Run Tests from VS Code
 
-#### Using VS Code Tasks
+1. Open Command Palette (⇧⌘P / Ctrl+Shift+P)
+2. Type "Tasks: Run Task"
+3. Select "Terraform: Run All Tests"
 
-You can also run tests directly from VS Code using the built-in tasks:
-
-1. Open the Command Palette (⇧⌘P on macOS or Ctrl+Shift+P on Windows/Linux)
-2. Type "Tasks: Run Task" and select it
-3. Choose "Terraform: Run All Tests" to run all tests
-
-This will execute the same script but provides a convenient way to run tests without leaving the editor.
-
-### Running Individual Tests
-
-To run a specific test, you need to initialize the test directory first and then run the test:
+### Run a Specific Module Test
 
 ```bash
-# Initialize the test directory
 terraform -chdir=tests/unit/resource_group init
-
-# Run the test
 terraform -chdir=tests/unit/resource_group test
 ```
 
-### Running All Tests
+**Need more details?** Continue reading for comprehensive testing information, writing new tests, and troubleshooting.
 
-You can use the provided script to run all tests:
+---
+
+## Testing Overview
+
+DevFactory uses **Terraform's native testing functionality** with **provider mocking** to verify modules without creating real Azure resources. This approach ensures tests are fast, reliable, and cost-effective.
+
+## Test Structure
+
+```text
+tests/
+├── run_tests.sh             # Script to run all tests
+├── integration/             # Integration tests (multiple modules)
+│   └── dev_center_integration_test.tftest.hcl
+└── unit/                    # Unit tests (individual modules)
+    ├── dev_center/
+    ├── dev_center_catalog/
+    ├── dev_center_dev_box_definition/
+    ├── dev_center_environment_type/
+    ├── dev_center_project/
+    ├── dev_center_project_pool/
+    ├── dev_center_project_pool_schedule/
+    └── resource_group/
+```
+
+- **Unit Tests**: Validate individual modules in isolation
+- **Integration Tests**: Validate interaction between multiple modules
+
+## Running Tests
+
+### All Tests
 
 ```bash
+# Command line
 ./tests/run_tests.sh
+
+# VS Code Task
+Command Palette → "Tasks: Run Task" → "Terraform: Run All Tests"
 ```
 
-### Running Tests with Verbose Output
-
-To see more details during test execution:
+### Individual Tests
 
 ```bash
-terraform -chdir=tests/unit/resource_group test -verbose
-```
+# Initialize and run
+terraform -chdir=tests/unit/[MODULE_NAME] init
+terraform -chdir=tests/unit/[MODULE_NAME] test
 
-### Testing Specific Test Runs
+# With verbose output
+terraform -chdir=tests/unit/[MODULE_NAME] test -verbose
 
-To run a specific test run block within a test file:
-
-```bash
-terraform -chdir=tests/unit/resource_group test run "test_basic_resource_group"
+# Specific test run
+terraform -chdir=tests/unit/[MODULE_NAME] test -run="test_name"
 ```
 
 ## Writing Tests
 
-### Test File Structure
-
-Each test file follows this structure:
+### Required Test Structure
 
 ```hcl
 variables {
-  # Test variables defined here
+  global_settings = {
+    prefixes      = ["dev"]
+    random_length = 3
+    passthrough   = false
+    use_slug      = true
+  }
+
+  # Resource-specific variables
+  resource_groups = {
+    rg1 = {
+      name   = "test-resource-group"
+      region = "eastus"
+      tags   = { environment = "test" }
+    }
+  }
+
+  # Empty variables for unused resources (REQUIRED)
+  dev_centers = {}
+  dev_center_projects = {}
+  # ... all other module variables
 }
 
-mock_provider "..." {
-  # Provider mock configurations
+mock_provider "azapi" {
+  mock_data "azapi_client_config" {
+    defaults = {
+      subscription_id = "12345678-1234-1234-1234-123456789012"
+      tenant_id       = "12345678-1234-1234-1234-123456789012"
+      client_id       = "12345678-1234-1234-1234-123456789012"
+    }
+  }
 }
+
+mock_provider "azurecaf" {}
 
 run "test_name" {
   command = plan  # or apply
 
-  variables {
-    # Test-specific variable overrides
-  }
-
   module {
-    source = "../../../"  # Path to the module being tested
+    source = "../../../"  # Path to root module
   }
 
   assert {
     condition     = module.resource_name != null
-    error_message = "Error message"
+    error_message = "Resource should exist"
   }
 }
 ```
 
-### Best Practices
+### Common Test Patterns
 
-1. **Use Mocks**: Always use mock providers in tests to avoid real resource creation
-2. **Test Multiple Configurations**: Test both basic and advanced configurations
-3. **Keep Assertions Focused**: For `plan` tests, only assert on values available during planning
-4. **Use Plan First**: Start with `plan` tests, then add `apply` tests if needed
-5. **Verify Missing Items**: Add assertions to verify resources should exist
+**Resource Creation**
+```hcl
+assert {
+  condition     = module.resource_name["key"] != null
+  error_message = "Resource should exist"
+}
+```
 
-## Common Issues and Solutions
+**Resource Properties**
+```hcl
+assert {
+  condition     = module.resource_name["key"].location == "eastus"
+  error_message = "Resource location should match expected value"
+}
+```
 
-- **Unknown Values in Plan**: When using `command = plan`, only assert on values that are known during planning
-- **Initialization Issues**: Ensure each test directory is properly initialized before running tests
-- **Provider Versions**: Make sure provider versions are compatible with your Terraform version
+**Resource Relationships**
+```hcl
+assert {
+  condition     = var.child_resource.parent_resource.key == "parent_key"
+  error_message = "Child resource should reference correct parent"
+}
+```
+
+## Best Practices
+
+- **Mock azapi provider** - Avoid creating real Azure resources
+- **Use azurecaf provider directly** - Don't mock naming conventions
+- **Include all required variables** - Define empty variables for unused modules
+- **Test resource properties and relationships** - Verify expected configurations
+- **Use descriptive test names** - Clearly indicate what's being tested
+- **Keep unit tests isolated** - Test modules independently
+- **Follow existing patterns** - Maintain consistency across tests
+
+## Troubleshooting
+
+### Common Issues
+
+**Version Requirements**
+- Terraform v1.12.1+ required
+- AzAPI provider v2.4.0+ required
+
+**Missing Variables**
+- Define all root module variables, even if empty:
+```hcl
+variables {
+  # ... required variables ...
+  dev_centers = {}
+  dev_center_projects = {}
+  # ... all other module variables
+}
+```
+
+**Provider Mock Configuration**
+- Always include azapi client config mock:
+```hcl
+mock_provider "azapi" {
+  mock_data "azapi_client_config" {
+    defaults = {
+      subscription_id = "12345678-1234-1234-1234-123456789012"
+      tenant_id       = "12345678-1234-1234-1234-123456789012"
+      client_id       = "12345678-1234-1234-1234-123456789012"
+    }
+  }
+}
+```
+
+**Plan vs Apply Assertions**
+- With `command = plan`, only assert on values known during planning
+- Some resource properties only available after apply
+
+### Validation Commands
+
+```bash
+# Format and validate
+terraform fmt -recursive
+terraform validate
+
+# Additional validation
+tflint --init && tflint
+```
 
 ## Continuous Integration
 
-Tests are automatically run in CI pipelines. You can check the CI configuration for details.
+Tests run automatically in CI pipelines with colored output and clear success/failure indicators for both local development and CI environments.
+When writing tests for DevFactory modules, follow these patterns:
+
+#### Unit Test Example
+
+```hcl
+variables {
+  global_settings = {
+    prefixes      = ["dev"]
+    random_length = 3
+    passthrough   = false
+    use_slug      = true
+  }
+
+  resource_groups = {
+    rg1 = {
+      name   = "test-resource-group"
+      region = "eastus"
+      tags = {
+        environment = "test"
+      }
+    }
+  }
+
+  # Include all required empty variables for the root module
+  dev_centers = {}
+  dev_center_projects = {}
+  # ... etc
+}
+
+mock_provider "azapi" {
+  mock_data "azapi_client_config" {
+    defaults = {
+      subscription_id = "12345678-1234-1234-1234-123456789012"
+      tenant_id       = "12345678-1234-1234-1234-123456789012"
+      client_id       = "12345678-1234-1234-1234-123456789012"
+    }
+  }
+}
+
+mock_provider "azurecaf" {}
+
+run "resource_group_creation" {
+  command = plan
+
+  module {
+    source = "../../../"
+  }
+
+  assert {
+    condition     = module.resource_groups["rg1"] != null
+    error_message = "Resource group should exist"
+  }
+
+  assert {
+    condition     = module.resource_groups["rg1"].location == "eastus"
+    error_message = "Resource group location should match expected value"
+  }
+}
+```
+
+#### Integration Test Example
+
+```hcl
+variables {
+  global_settings = {
+    prefixes      = ["dev"]
+    random_length = 3
+    passthrough   = false
+    use_slug      = true
+  }
+
+  resource_groups = {
+    rg1 = {
+      name   = "test-resource-group"
+      region = "eastus"
+      tags = {
+        environment = "test"
+      }
+    }
+  }
+
+  dev_centers = {
+    devcenter1 = {
+      name = "test-dev-center"
+      resource_group = {
+        key = "rg1"
+      }
+      identity = {
+        type = "SystemAssigned"
+      }
+      tags = {
+        environment = "test"
+        module      = "dev_center"
+      }
+    }
+  }
+
+  # Include other resources as needed
+}
+
+mock_provider "azapi" {
+  mock_data "azapi_client_config" {
+    defaults = {
+      subscription_id = "12345678-1234-1234-1234-123456789012"
+      tenant_id       = "12345678-1234-1234-1234-123456789012"
+      client_id       = "12345678-1234-1234-1234-123456789012"
+    }
+  }
+}
+
+mock_provider "azurecaf" {}
+
+run "full_infrastructure_creation" {
+  command = plan
+
+  module {
+    source = "../../"
+  }
+
+  assert {
+    condition     = module.resource_groups["rg1"] != null
+    error_message = "Resource group should exist"
+  }
+
+  assert {
+    condition     = module.dev_centers["devcenter1"] != null
+    error_message = "Dev center should exist"
+  }
+
+  # Test relationships between resources
+  assert {
+    condition     = var.dev_centers.devcenter1.resource_group.key == "rg1"
+    error_message = "Dev center should reference the correct resource group"
+  }
+}
+```
+
+## Best Practices
+
+When writing tests for DevFactory, follow these best practices:
+
+1. **Mock the azapi provider**: Use provider mocking to avoid creating real Azure resources during testing
+2. **Use the azurecaf provider directly**: The azurecaf provider should be used directly, not mocked, for naming conventions
+3. **Test resource properties**: Verify that resources are created with the expected properties
+4. **Test resource relationships**: Verify that resources are correctly associated with each other
+5. **Include all required variables**: Ensure all variables required by the root module are defined, even if empty
+6. **Use descriptive test names**: Name test runs clearly to indicate what is being tested
+7. **Focus assertions appropriately**: For `plan` tests, only assert on values available during planning
+8. **Test multiple configurations**: Test both basic and advanced configurations
+9. **Keep tests isolated**: Unit tests should test modules in isolation
+10. **Follow existing patterns**: When adding new tests, follow the existing pattern for consistency
+
+## Common Testing Patterns
+
+### Testing Resource Creation
+
+```hcl
+assert {
+  condition     = module.resource_name["key"] != null
+  error_message = "Resource should exist"
+}
+```
+
+### Testing Resource Properties
+
+```hcl
+assert {
+  condition     = module.resource_name["key"].location == "eastus"
+  error_message = "Resource location should match expected value"
+}
+```
+
+### Testing Resource Relationships
+
+```hcl
+assert {
+  condition     = var.child_resource.parent_resource.key == "parent_key"
+  error_message = "Child resource should reference the correct parent"
+}
+```
+
+### Testing Variable Values
+
+```hcl
+assert {
+  condition     = var.resource_config.property == "expected_value"
+  error_message = "Variable should have expected value"
+}
+```
+
+## Troubleshooting
+
+If you encounter issues when running tests, check the following:
+
+### Common Issues
+
+1. **Terraform version**: Ensure you are using Terraform version 1.12.1 or higher
+2. **Provider versions**: Ensure you are using compatible provider versions (AzAPI v2.4.0)
+3. **Test file structure**: Ensure the test file follows the correct structure
+4. **Module source paths**: Ensure the module source paths are correctly specified
+5. **Variable definitions**: Ensure all required variables are defined
+6. **Initialization**: Ensure test directories are properly initialized
+
+### Unknown Values in Plan
+
+When using `command = plan`, only assert on values that are known during planning. Some resource properties may only be available after apply.
+
+### Missing Variable Errors
+
+Ensure all variables required by the root module are defined in the test file, even if they are empty:
+
+```hcl
+variables {
+  # Required variables
+  global_settings = { ... }
+  resource_groups = { ... }
+  
+  # Empty variables for unused resources
+  dev_centers = {}
+  dev_center_projects = {}
+  dev_center_catalogs = {}
+  # ... etc
+}
+```
+
+### Provider Mock Configuration
+
+Ensure the azapi provider mock includes the client config data:
+
+```hcl
+mock_provider "azapi" {
+  mock_data "azapi_client_config" {
+    defaults = {
+      subscription_id = "12345678-1234-1234-1234-123456789012"
+      tenant_id       = "12345678-1234-1234-1234-123456789012"
+      client_id       = "12345678-1234-1234-1234-123456789012"
+    }
+  }
+}
+```
+
+## Validation Commands
+
+Before running tests, you can validate your Terraform configuration:
+
+```bash
+# Format Terraform files
+terraform fmt -recursive
+
+# Validate Terraform configuration
+terraform validate
+
+# Run TFLint for additional validation
+tflint --init && tflint
+```
+
+These commands are also available as VS Code tasks and should be run before committing changes.
+
+## Continuous Integration
+
+Tests are automatically run in CI pipelines to ensure code quality and prevent regressions. The test runner script provides colored output and clear success/failure indicators suitable for both local development and CI environments.

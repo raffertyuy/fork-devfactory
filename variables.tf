@@ -258,22 +258,34 @@ variable "dev_center_environment_types" {
 variable "dev_center_network_connections" {
   description = "Dev Center Network Connections configuration objects"
   type = map(object({
-    name          = string
-    dev_center_id = optional(string)
+    name             = string
+    domain_join_type = string
+    subnet_id        = string
+    dev_center_id    = optional(string)
     dev_center = optional(object({
       key = string
     }))
-    network_connection_resource_id = string
-    subnet_resource_id             = string
+    resource_group = optional(object({
+      key = string
+    }))
     domain_join = optional(object({
       domain_name               = string
       domain_password_secret_id = optional(string)
       domain_username           = string
       organizational_unit_path  = optional(string)
     }))
-    tags = optional(map(string), {})
+    networking_resource_group_name = optional(string)
+    tags                           = optional(map(string), {})
   }))
   default = {}
+
+  validation {
+    condition = alltrue([
+      for k, v in var.dev_center_network_connections :
+      contains(["AzureADJoin", "HybridAzureADJoin", "None"], v.domain_join_type)
+    ])
+    error_message = "Domain join type must be one of: AzureADJoin, HybridAzureADJoin, None."
+  }
 }
 
 # tflint-ignore: terraform_unused_declarations

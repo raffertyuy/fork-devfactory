@@ -1,6 +1,6 @@
 # Dev Center Network Connection Module
 
-This module manages an Azure Dev Center Network Connection using the `azurerm_dev_center_network_connection` resource.
+This module manages an Azure Dev Center Network Connection using the `azapi_resource` resource.
 
 ## Overview
 
@@ -82,14 +82,14 @@ module "dev_center_network_connection" {
 |------|---------|
 | terraform | >= 1.9.0 |
 | azurecaf | ~> 1.2.29 |
-| azurerm | ~> 4.0 |
+| azapi | ~> 2.4.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | azurecaf | ~> 1.2.29 |
-| azurerm | ~> 4.0 |
+| azapi | ~> 2.4.0 |
 
 ## Inputs
 
@@ -110,13 +110,16 @@ module "dev_center_network_connection" {
 | resource_group_name | The resource group name of the Dev Center Network Connection |
 | domain_join_type | The domain join type of the Dev Center Network Connection |
 | subnet_id | The subnet ID of the Dev Center Network Connection |
+| provisioning_state | The provisioning state of the Dev Center Network Connection |
+| health_check_status | The health check status of the Dev Center Network Connection |
 
 ## Resources
 
 | Name | Type |
 |------|------|
 | azurecaf_name.dev_center_network_connection | resource |
-| azurerm_dev_center_network_connection.this | resource |
+| azapi_resource.this | resource |
+| azapi_client_config.current | data source |
 
 ## Notes
 

@@ -1,0 +1,65 @@
+global_settings = {
+  prefixes      = ["dev"]
+  random_length = 3
+  passthrough   = false
+  use_slug      = true
+}
+
+resource_groups = {
+  rg1 = {
+    name   = "devfactory-dc"
+    region = "eastus"
+  }
+}
+
+dev_centers = {
+  devcenter1 = {
+    name = "devcenter"
+    resource_group = {
+      key = "rg1"
+    }
+    tags = {
+      environment = "demo"
+      module      = "dev_center"
+    }
+  }
+}
+
+dev_center_environment_types = {
+  development = {
+    name         = "development"
+    display_name = "Development Environment Type"
+    dev_center = {
+      key = "devcenter1"
+    }
+    tags = {
+      environment = "demo"
+      module      = "dev_center_environment_type"
+      purpose     = "development"
+    }
+  }
+  staging = {
+    name         = "staging"
+    display_name = "Staging Environment Type"
+    dev_center = {
+      key = "devcenter1"
+    }
+    tags = {
+      environment = "demo"
+      module      = "dev_center_environment_type"
+      purpose     = "staging"
+    }
+  }
+  production = {
+    name         = "production"
+    display_name = "Production Environment Type"
+    dev_center = {
+      key = "devcenter1"
+    }
+    tags = {
+      environment = "demo"
+      module      = "dev_center_environment_type"
+      purpose     = "production"
+    }
+  }
+}

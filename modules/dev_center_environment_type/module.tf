@@ -15,11 +15,11 @@ terraform {
 locals {
   tags = merge(
     try(var.global_settings.tags, {}),
-    try(var.environment_type.tags, {}),
-    try(var.tags, {})
+    try(var.environment_type.tags, {})
   )
 }
 
+# Using resource instead of data source to ensure stable naming across plan/apply
 resource "azurecaf_name" "environment_type" {
   name          = var.environment_type.name
   resource_type = "azurerm_dev_center_environment_type"
@@ -30,16 +30,26 @@ resource "azurecaf_name" "environment_type" {
   use_slug      = var.global_settings.use_slug
 }
 
-resource "azapi_resource" "environment_type" {
-  type                   = "Microsoft.DevCenter/devcenters/environmentTypes@2025-04-01-preview"
-  name                   = azurecaf_name.environment_type.result
-  parent_id              = var.dev_center_id
-  tags                   = local.tags
-  response_export_values = ["properties.displayName"]
+resource "azapi_resource" "dev_center_environment_type" {
+  type      = "Microsoft.DevCenter/devcenters/environmentTypes@2025-04-01-preview"
+  name      = azurecaf_name.environment_type.result
+  parent_id = var.dev_center_id
 
   body = {
-    properties = {
-      displayName = try(var.environment_type.display_name, var.environment_type.name)
-    }
+    properties = merge(
+      try(var.environment_type.display_name, null) != null ? {
+        displayName = var.environment_type.display_name
+      } : {}
+    )
+    tags = local.tags
+  }
+
+  response_export_values = ["properties"]
+
+  # Ignore changes to system-managed tags that Azure automatically adds
+  lifecycle {
+    ignore_changes = [
+      tags["hidden-title"]
+    ]
   }
 }

@@ -18,25 +18,24 @@ dev_centers = {
     resource_group = {
       key = "rg1"
     }
-    identity = {
-      type = "SystemAssigned"
-    }
     tags = {
       environment = "demo"
+      module      = "dev_center"
     }
   }
 }
 
 dev_center_environment_types = {
-  envtype1 = {
-    name         = "terraform-env"
-    display_name = "Terraform Environment Type"
+  development = {
+    name         = "development"
+    display_name = "Development Environment Type"
     dev_center = {
       key = "devcenter1"
     }
     tags = {
       environment = "demo"
       module      = "dev_center_environment_type"
+      purpose     = "development"
     }
   }
 }
