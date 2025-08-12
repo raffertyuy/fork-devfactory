@@ -28,7 +28,7 @@ dev_center_network_connections = {
   "enhanced_hybrid_connection" = {
     name             = "enhanced-hybrid-network-connection"
     domain_join_type = "HybridAzureADJoin"
-    subnet_id        = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/rg-alz-connectivity/providers/Microsoft.Network/virtualNetworks/alz-hub-eastus2/subnets/Sandbox"
+    subnet_id        = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-alz-connectivity/providers/Microsoft.Network/virtualNetworks/alz-hub-eastus2/subnets/Sandbox"
     resource_group = {
       key = "dev_center_network_connection"
     }
