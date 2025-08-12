@@ -23,11 +23,6 @@ output "deployment_target_id" {
   value       = var.project_environment_type.deployment_target_id
 }
 
-output "location" {
-  description = "The location of the Dev Center Project Environment Type"
-  value       = var.location
-}
-
 output "provisioning_state" {
   description = "The provisioning state of the Dev Center Project Environment Type"
   value       = try(azapi_resource.dev_center_project_environment_type.output.properties.provisioningState, null)

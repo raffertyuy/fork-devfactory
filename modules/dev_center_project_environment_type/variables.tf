@@ -19,11 +19,6 @@ variable "dev_center_project_id" {
   }
 }
 
-variable "location" {
-  description = "The location/region where the Dev Center Project Environment Type is created"
-  type        = string
-}
-
 variable "project_environment_type" {
   description = "Configuration object for the Dev Center Project Environment Type"
   type = object({

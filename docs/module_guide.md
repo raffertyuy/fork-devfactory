@@ -233,9 +233,7 @@ module "dev_center_project_environment_types" {
 
   global_settings          = var.global_settings
   project_environment_type = each.value
-  location                 = lookup(each.value, "location", null) != null ? each.value.location : module.resource_groups[each.value.resource_group.key].location
   dev_center_project_id    = lookup(each.value, "dev_center_project_id", null) != null ? each.value.dev_center_project_id : module.dev_center_projects[each.value.project.key].id
-  deployment_target_id     = each.value.deployment_target_id
 }
 ```
 
@@ -244,9 +242,7 @@ module "dev_center_project_environment_types" {
 |----------|------|----------|-------------|
 | `global_settings` | `object` | Yes | Global settings for naming and prefixing |
 | `project_environment_type` | `object` | Yes | Project environment type configuration object |
-| `location` | `string` | Yes | Azure region for deployment |
 | `dev_center_project_id` | `string` | Yes | The ID of the project |
-| `deployment_target_id` | `string` | Yes | The ID of the deployment target |
 
 ### Project Environment Type Configuration Options
 ```hcl

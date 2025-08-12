@@ -4,7 +4,34 @@
 
 This document summarizes the updates made to the Azure DevCenter module to implement the 2025-04-01-preview API version and fix the identity block placement.
 
-## Latest Changes (July 28, 2025)
+## Latest Changes (August 12, 2025)
+
+### Dev Center Project Environment Type Module - Complete Implementation
+- **Created**: Full implementation of the `dev_center_project_environment_type` module
+- **Classification**: Feature
+- **Breaking Change**: NO - New module addition, no existing functionality changed
+- **Files Created**:
+  - `modules/dev_center_project_environment_type/module.tf`: Main module with AzAPI resource implementation
+  - `modules/dev_center_project_environment_type/variables.tf`: Strong typing and validation rules  
+  - `modules/dev_center_project_environment_type/output.tf`: Comprehensive output definitions
+  - `modules/dev_center_project_environment_type/README.md`: Module documentation and usage examples
+  - `dev_center_project_environment_types.tf`: Root orchestration file
+  - `examples/dev_center_project_environment_type/simple_case/configuration.tfvars`: Basic example
+  - `examples/dev_center_project_environment_type/enhanced_case/configuration.tfvars`: Enterprise example with RBAC
+  - `examples/dev_center_project_environment_type/simple_case/README.md`: Simple case documentation
+  - `examples/dev_center_project_environment_type/enhanced_case/README.md`: Enhanced case documentation
+  - `tests/unit/dev_center_project_environment_type/project_environment_type_test.tftest.hcl`: Comprehensive unit tests
+- **Files Updated**:
+  - `variables.tf`: Added `dev_center_project_environment_types` variable with strong typing and validation
+  - `docs/file_structure.md`: Updated to document new module structure
+  - `docs/module_guide.md`: Updated usage patterns and configuration options
+- **Description**: Complete project environment type module linking environment types to specific Dev Center projects
+- **API Version**: Microsoft.DevCenter/projects/environmentTypes@2025-04-01-preview
+- **Features**: Role-based access control, deployment target configuration, azurecaf naming, comprehensive tagging
+- **Dependencies**: Requires dev_center_projects and dev_center_environment_types modules
+- **Validation**: Unit tests include basic functionality, role assignments, and multiple configurations
+
+## Previous Changes (July 28, 2025)
 
 ### Dev Center Network Connection Module - AzAPI Migration
 - **Updated**: Migrated `dev_center_network_connection` module from azurerm to azapi provider

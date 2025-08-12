@@ -22,7 +22,7 @@ locals {
 # Using resource instead of data source to ensure stable naming across plan/apply
 resource "azurecaf_name" "project_environment_type" {
   name          = var.project_environment_type.name
-  resource_type = "azurerm_dev_center_environment_type"
+  resource_type = "general"
   prefixes      = var.global_settings.prefixes
   random_length = var.global_settings.random_length
   clean_input   = true
@@ -34,7 +34,6 @@ resource "azapi_resource" "dev_center_project_environment_type" {
   type      = "Microsoft.DevCenter/projects/environmentTypes@2025-04-01-preview"
   name      = azurecaf_name.project_environment_type.result
   parent_id = var.dev_center_project_id
-  location  = var.location
 
   body = {
     properties = merge(

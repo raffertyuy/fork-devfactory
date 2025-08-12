@@ -10,7 +10,6 @@ module "dev_center_project_environment_type" {
 
   global_settings       = var.global_settings
   dev_center_project_id = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/my-rg/providers/Microsoft.DevCenter/projects/my-project"
-  location              = "eastus"
   
   project_environment_type = {
     name                  = "development"
@@ -39,7 +38,6 @@ module "dev_center_project_environment_type" {
 |------|-------------|------|---------|:--------:|
 | global_settings | Global settings object containing naming conventions and tags | `object` | n/a | yes |
 | dev_center_project_id | The ID of the Dev Center Project that will contain the environment type | `string` | n/a | yes |
-| location | The location/region where the Dev Center Project Environment Type is created | `string` | n/a | yes |
 | project_environment_type | Configuration object for the project environment type | `object` | n/a | yes |
 
 ### project_environment_type object
@@ -75,7 +73,6 @@ module "dev_center_project_environment_type" {
 | dev_center_project_id | The ID of the parent Dev Center Project |
 | environment_type_name | The name of the environment type linked to this project |
 | deployment_target_id | The deployment target ID for this project environment type |
-| location | The location of the Dev Center Project Environment Type |
 | provisioning_state | The provisioning state of the Dev Center Project Environment Type |
 
 ## Requirements

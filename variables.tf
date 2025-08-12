@@ -371,7 +371,6 @@ variable "dev_center_project_environment_types" {
     }))
     environment_type_name    = string
     deployment_target_id     = string
-    location                 = optional(string)
     creator_role_assignment = optional(object({
       roles = list(string)
     }))
