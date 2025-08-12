@@ -50,6 +50,7 @@ This section contains specific files/callouts. If the file is not explained here
 - **dev_center_dev_box_definitions.tf**: Defines DevBox configurations with VM specifications and images.
 - **dev_center_environment_types.tf**: Creates environment types for defining available development environments.
 - **dev_center_network_connections.tf**: Establishes network connectivity between Dev Centers and virtual networks.
+- **dev_center_project_environment_types.tf**: Links environment types to specific projects, enabling projects to create environments of specified types.
 - **dev_center_project_pools.tf**: Manages pools of development resources within projects.
 - **dev_center_project_pool_schedules.tf**: Configures scheduling for automated pool management and cost optimization.
 

@@ -4,7 +4,37 @@
 
 This document summarizes the updates made to the Azure DevCenter module to implement the 2025-04-01-preview API version and fix the identity block placement.
 
-## Latest Changes (July 28, 2025)
+## Latest Changes (August 12, 2025)
+
+### Dev Center Project Environment Type Module - Complete Implementation
+- **Created**: Full implementation of the `dev_center_project_environment_type` module
+- **Classification**: Feature
+- **Breaking Change**: NO - New module, no existing functionality affected
+- **Files Created**:
+  - `modules/dev_center_project_environment_type/module.tf`: Main module with AzAPI resource implementation
+  - `modules/dev_center_project_environment_type/variables.tf`: Strong typing and validation rules for project environment types
+  - `modules/dev_center_project_environment_type/output.tf`: Comprehensive output definitions
+  - `modules/dev_center_project_environment_type/README.md`: Module documentation and usage examples
+  - `dev_center_project_environment_types.tf`: Root orchestration file for project environment types
+  - `examples/dev_center_project_environment_type/simple_case/configuration.tfvars`: Basic example linking environment type to project
+  - `examples/dev_center_project_environment_type/enhanced_case/configuration.tfvars`: Advanced example with multiple projects and environment types
+  - `examples/dev_center_project_environment_type/simple_case/README.md`: Simple example documentation
+  - `examples/dev_center_project_environment_type/enhanced_case/README.md`: Enhanced example documentation
+- **Files Updated**:
+  - `variables.tf`: Added `dev_center_project_environment_types` variable with validation
+  - `docs/file_structure.md`: Updated with project environment type module information
+- **Description**: Links environment types to specific projects within Azure Dev Centers, enabling projects to create environments of specified types
+- **API Version**: Microsoft.DevCenter/projects/environmentTypes@2025-04-01-preview
+- **Features**: 
+  - Links environment types to projects for environment creation
+  - Deployment target configuration (subscription or resource group level)
+  - Role assignment configuration for environment creators
+  - Status management (Enabled/Disabled)
+  - Comprehensive validation for all input parameters
+  - Multiple example configurations demonstrating different use cases
+- **Dependencies**: Requires existing dev_center, dev_center_project, and dev_center_environment_type modules
+
+## Earlier Changes (July 28, 2025)
 
 ### Dev Center Network Connection Module - AzAPI Migration
 - **Updated**: Migrated `dev_center_network_connection` module from azurerm to azapi provider

@@ -360,3 +360,54 @@ variable "dev_center_project_pool_schedules" {
   }))
   default = {}
 }
+
+# tflint-ignore: terraform_unused_declarations
+variable "dev_center_project_environment_types" {
+  description = "DevCenter Project Environment Types configuration objects"
+  type = map(object({
+    name                   = string
+    display_name           = optional(string)
+    status                 = optional(string, "Enabled")
+    location               = optional(string, "eastus")
+    deployment_target_id   = string
+    dev_center_project_id  = optional(string)
+    environment_type_id    = optional(string)
+    project = optional(object({
+      key = string
+    }))
+    environment_type = optional(object({
+      key = string
+    }))
+    creator_role_assignment = optional(object({
+      roles = list(string)
+    }))
+    tags = optional(map(string), {})
+  }))
+  default = {}
+
+  validation {
+    condition = alltrue([
+      for pet_key, pet in var.dev_center_project_environment_types :
+      pet.status == null || contains(["Enabled", "Disabled"], pet.status)
+    ])
+    error_message = "Status must be either 'Enabled' or 'Disabled' for all project environment types."
+  }
+
+  validation {
+    condition = alltrue([
+      for pet_key, pet in var.dev_center_project_environment_types :
+      can(regex("^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]$", pet.name)) && 
+      length(pet.name) >= 3 && 
+      length(pet.name) <= 128
+    ])
+    error_message = "Project environment type names must be between 3 and 128 characters long and can contain alphanumeric characters, periods, hyphens, and underscores. They must start and end with an alphanumeric character."
+  }
+
+  validation {
+    condition = alltrue([
+      for pet_key, pet in var.dev_center_project_environment_types :
+      can(regex("^/subscriptions/[0-9a-f-]+(/resourceGroups/[^/]+)?$", pet.deployment_target_id))
+    ])
+    error_message = "Deployment target ID must be a valid Azure subscription ID or resource group ID for all project environment types."
+  }
+}
