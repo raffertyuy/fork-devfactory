@@ -27,8 +27,13 @@ locals {
   )
 }
 
+# Extract environment type name from the environment type ID for the resource name
+locals {
+  environment_type_name = element(split("/", var.environment_type_id), length(split("/", var.environment_type_id)) - 1)
+}
+
 resource "azurecaf_name" "project_environment_type" {
-  name          = var.project_environment_type.name
+  name          = local.environment_type_name
   resource_type = "azurerm_dev_center_environment_type"
   prefixes      = var.global_settings.prefixes
   random_length = var.global_settings.random_length
@@ -40,7 +45,7 @@ resource "azurecaf_name" "project_environment_type" {
 # DevCenter Project Environment Type Resource
 resource "azapi_resource" "dev_center_project_environment_type" {
   type      = "Microsoft.DevCenter/projects/environmentTypes@2025-04-01-preview"
-  name      = azurecaf_name.project_environment_type.result
+  name      = local.environment_type_name
   parent_id = var.dev_center_project_id
   location  = var.location
 
@@ -54,9 +59,6 @@ resource "azapi_resource" "dev_center_project_environment_type" {
       
       # Optional status setting
       status = try(var.project_environment_type.status, "Enabled")
-      
-      # Optional display name
-      displayName = try(var.project_environment_type.display_name, var.project_environment_type.name)
       
       # Optional role assignments for environment creators
       creatorRoleAssignment = try(var.project_environment_type.creator_role_assignment, null) != null ? {

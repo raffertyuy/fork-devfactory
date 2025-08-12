@@ -15,19 +15,13 @@ variable "global_settings" {
 variable "project_environment_type" {
   description = "Configuration object for the DevCenter Project Environment Type"
   type = object({
-    name         = string
-    display_name = optional(string)
-    status       = optional(string, "Enabled")
+    status = optional(string, "Enabled")
     creator_role_assignment = optional(object({
       roles = list(string)
     }))
     tags = optional(map(string), {})
   })
-
-  validation {
-    condition     = can(regex("^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]$", var.project_environment_type.name)) && length(var.project_environment_type.name) >= 3 && length(var.project_environment_type.name) <= 128
-    error_message = "Project environment type name must be between 3 and 128 characters long and can contain alphanumeric characters, periods, hyphens, and underscores. It must start and end with an alphanumeric character."
-  }
+  default = {}
 
   validation {
     condition     = var.project_environment_type.status == null || contains(["Enabled", "Disabled"], var.project_environment_type.status)

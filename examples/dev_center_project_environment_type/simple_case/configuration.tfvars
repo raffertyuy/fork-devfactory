@@ -59,8 +59,6 @@ dev_center_projects = {
 
 dev_center_project_environment_types = {
   projenvtype1 = {
-    name                 = "development"
-    display_name         = "Project Development Environment"
     deployment_target_id = "/subscriptions/12345678-1234-1234-1234-123456789012"
     project = {
       key = "project1"

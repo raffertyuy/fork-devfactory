@@ -15,9 +15,7 @@ module "dev_center_project_environment_type" {
   location               = "eastus"
   
   project_environment_type = {
-    name         = "development"
-    display_name = "Development Environment Type"
-    status       = "Enabled"
+    status = "Enabled"
     creator_role_assignment = {
       roles = ["Contributor", "DevCenter Dev Box User"]
     }
@@ -54,8 +52,6 @@ module "dev_center_project_environment_type" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| name | The name of the project environment type | `string` | n/a | yes |
-| display_name | The display name of the project environment type | `string` | `null` | no |
 | status | The status of the project environment type (Enabled/Disabled) | `string` | `"Enabled"` | no |
 | creator_role_assignment | Role assignment configuration for environment creators | `object` | `null` | no |
 | tags | A mapping of tags to assign to the project environment type | `map(string)` | `{}` | no |
@@ -105,9 +101,7 @@ module "project_env_type_dev" {
   location             = "eastus"
 
   project_environment_type = {
-    name         = "development"
-    display_name = "Development Environment Type"
-    status       = "Enabled"
+    status = "Enabled"
     creator_role_assignment = {
       roles = ["Contributor"]
     }

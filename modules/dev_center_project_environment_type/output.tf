@@ -38,7 +38,7 @@ output "deployment_target_id" {
 
 output "display_name" {
   description = "The display name of the project environment type"
-  value       = try(azapi_resource.dev_center_project_environment_type.output.properties.displayName, null)
+  value       = try(azapi_resource.dev_center_project_environment_type.output.properties.displayName, local.environment_type_name)
 }
 
 output "status" {

@@ -102,8 +102,6 @@ dev_center_projects = {
 
 dev_center_project_environment_types = {
   frontend_dev = {
-    name                 = "development"
-    display_name         = "Frontend Development Environment"
     status               = "Enabled"
     deployment_target_id = "/subscriptions/12345678-1234-1234-1234-123456789012"
     project = {
@@ -121,8 +119,6 @@ dev_center_project_environment_types = {
     }
   }
   frontend_staging = {
-    name                 = "staging"
-    display_name         = "Frontend Staging Environment"
     status               = "Enabled"
     deployment_target_id = "/subscriptions/12345678-1234-1234-1234-123456789012"
     project = {
@@ -140,8 +136,6 @@ dev_center_project_environment_types = {
     }
   }
   backend_dev = {
-    name                 = "development"
-    display_name         = "Backend Development Environment"
     status               = "Enabled"
     deployment_target_id = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/backend-dev-rg"
     project = {
@@ -159,8 +153,6 @@ dev_center_project_environment_types = {
     }
   }
   backend_production = {
-    name                 = "production"
-    display_name         = "Backend Production Environment"
     status               = "Disabled"  # Disabled by default, enable when ready
     deployment_target_id = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/backend-prod-rg"
     project = {
