@@ -360,3 +360,42 @@ variable "dev_center_project_pool_schedules" {
   }))
   default = {}
 }
+
+variable "dev_center_project_environment_types" {
+  description = "DevCenter Project Environment Types configuration objects"
+  type = map(object({
+    name                     = string
+    dev_center_project_id    = optional(string)
+    dev_center_project = optional(object({
+      key = string
+    }))
+    environment_type_name    = string
+    deployment_target_id     = string
+    location                 = optional(string)
+    creator_role_assignment = optional(object({
+      roles = list(string)
+    }))
+    user_role_assignments = optional(list(object({
+      roles    = list(string)
+      user_id  = optional(string)
+    })))
+    tags = optional(map(string), {})
+  }))
+  default = {}
+
+  validation {
+    condition = alltrue([
+      for k, v in var.dev_center_project_environment_types :
+      length(v.name) >= 3 && length(v.name) <= 63
+    ])
+    error_message = "Environment type name must be between 3 and 63 characters long."
+  }
+
+  validation {
+    condition = alltrue([
+      for k, v in var.dev_center_project_environment_types :
+      can(regex("^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]$", v.name))
+    ])
+    error_message = "Environment type name must start and end with alphanumeric characters and can contain letters, numbers, periods, hyphens, and underscores."
+  }
+}
