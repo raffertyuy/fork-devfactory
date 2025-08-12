@@ -85,7 +85,25 @@ variables {
   // Empty variables required by the root module
   dev_center_galleries                 = {}
   dev_center_dev_box_definitions       = {}
-  dev_center_project_environment_types = {}
+  dev_center_project_environment_types = {
+    integration_projenvtype = {
+      name                 = "test-project-environment-type"
+      display_name         = "Test Project Environment Type"
+      status               = "Enabled"
+      deployment_target_id = "/subscriptions/12345678-1234-1234-1234-123456789012"
+      project = {
+        key = "project1"
+      }
+      resource_group = {
+        key = "rg1"
+      }
+      tags = {
+        environment = "test"
+        module      = "dev_center_project_environment_type"
+        test_type   = "integration"
+      }
+    }
+  }
   dev_center_network_connections       = {}
   shared_image_galleries               = {}
 }
@@ -149,5 +167,15 @@ run "full_infrastructure_creation" {
   assert {
     condition     = var.dev_center_projects.project1.maximum_dev_boxes_per_user == 3
     error_message = "Project max dev boxes should be 3"
+  }
+
+  assert {
+    condition     = module.dev_center_project_environment_types["integration_projenvtype"] != null
+    error_message = "Project environment type module should exist"
+  }
+
+  assert {
+    condition     = var.dev_center_project_environment_types.integration_projenvtype.status == "Enabled"
+    error_message = "Project environment type status should be Enabled"
   }
 }

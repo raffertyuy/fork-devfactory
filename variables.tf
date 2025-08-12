@@ -360,3 +360,43 @@ variable "dev_center_project_pool_schedules" {
   }))
   default = {}
 }
+
+variable "dev_center_project_environment_types" {
+  description = "Dev Center Project Environment Types configuration objects"
+  type = map(object({
+    name                      = string
+    display_name              = optional(string)
+    status                    = optional(string, "Enabled")
+    deployment_target_id      = string
+    dev_center_project_id     = optional(string)
+    project = optional(object({
+      key = string
+    }))
+    resource_group_id = optional(string)
+    resource_group = optional(object({
+      key = string
+    }))
+    location = optional(string)
+    tags     = optional(map(string), {})
+
+    # Creator role assignment configuration
+    creator_role_assignment = optional(object({
+      roles = map(object({
+        role_definition_id = string
+      }))
+    }))
+
+    # User role assignments configuration
+    user_role_assignments = optional(map(object({
+      roles = map(object({
+        role_definition_id = string
+      }))
+    })))
+  }))
+  default = {}
+
+  validation {
+    condition     = alltrue([for k, v in var.dev_center_project_environment_types : contains(["Enabled", "Disabled"], v.status)])
+    error_message = "Status must be either 'Enabled' or 'Disabled' for all project environment types."
+  }
+}
