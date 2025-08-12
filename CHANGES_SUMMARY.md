@@ -4,7 +4,34 @@
 
 This document summarizes the updates made to the Azure DevCenter module to implement the 2025-04-01-preview API version and fix the identity block placement.
 
-## Latest Changes (July 28, 2025)
+## Latest Changes (August 12, 2025)
+
+### Dev Center Project Environment Type Module - New Implementation
+- **Added**: Complete implementation of `dev_center_project_environment_type` module
+- **Classification**: Feature
+- **Breaking Change**: NO - New module addition, no existing functionality modified
+- **Files Added**:
+  - `modules/dev_center_project_environment_type/module.tf`: Main module implementation using azapi provider
+  - `modules/dev_center_project_environment_type/variables.tf`: Strong-typed variables with validation
+  - `modules/dev_center_project_environment_type/output.tf`: Comprehensive outputs for all properties
+  - `modules/dev_center_project_environment_type/README.md`: Complete module documentation
+  - `dev_center_project_environment_types.tf`: Root orchestration file
+  - `examples/dev_center_project_environment_type/simple_case/configuration.tfvars`: Working example
+  - `tests/unit/dev_center_project_environment_type/dev_center_project_environment_type_test.tftest.hcl`: Unit tests
+- **Files Modified**:
+  - `variables.tf`: Added `dev_center_project_environment_types` variable with validation
+  - `tests/integration/dev_center_integration_test.tftest.hcl`: Added integration test coverage
+  - `.vscode/tasks.json`: Added example to VS Code task picker
+  - `docs/file_structure.md`: Added documentation for new module
+  - `docs/plans/dev_center_project_environment_type.plan.md`: Implementation plan
+- **Features**: 
+  - Links environment types to projects within Dev Centers
+  - Supports role assignments for creators and users
+  - Full Azure API v2025-04-01-preview compatibility
+  - Strong typing with comprehensive validation rules
+- **Testing**: Comprehensive unit and integration tests with mock providers
+
+## Previous Changes (July 28, 2025)
 
 ### Dev Center Network Connection Module - AzAPI Migration
 - **Updated**: Migrated `dev_center_network_connection` module from azurerm to azapi provider

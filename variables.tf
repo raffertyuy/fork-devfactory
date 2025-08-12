@@ -10,6 +10,12 @@ variable "global_settings" {
   })
 }
 
+variable "location" {
+  description = "The default location/region where resources are created"
+  type        = string
+  default     = "eastus"
+}
+
 variable "resource_groups" {
   description = "Resource groups configuration objects"
   type = map(object({
@@ -364,11 +370,11 @@ variable "dev_center_project_pool_schedules" {
 variable "dev_center_project_environment_types" {
   description = "Dev Center Project Environment Types configuration objects"
   type = map(object({
-    name                      = string
-    display_name              = optional(string)
-    status                    = optional(string, "Enabled")
-    deployment_target_id      = string
-    dev_center_project_id     = optional(string)
+    name                  = string
+    display_name          = optional(string)
+    status                = optional(string, "Enabled")
+    deployment_target_id  = string
+    dev_center_project_id = optional(string)
     project = optional(object({
       key = string
     }))
