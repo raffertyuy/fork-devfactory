@@ -4,7 +4,32 @@
 
 This document summarizes the updates made to the Azure DevCenter module to implement the 2025-04-01-preview API version and fix the identity block placement.
 
-## Latest Changes (July 28, 2025)
+## Latest Changes (January 13, 2025)
+
+### Dev Center Project Environment Type Module - New Implementation
+- **Added**: Complete implementation of `dev_center_project_environment_type` module
+- **Classification**: Feature
+- **Breaking Change**: NO - New module addition, no impact on existing infrastructure
+- **Files Added**:
+  - `modules/dev_center_project_environment_type/module.tf`: Core module implementation using AzAPI provider v2.4.0
+    - Resource type: `Microsoft.DevCenter/projects/environmentTypes@2025-04-01-preview`
+    - Supports deployment target configuration, role assignments, and status management
+    - Follows established azurecaf naming patterns and tag merging
+  - `modules/dev_center_project_environment_type/variables.tf`: Strongly-typed input variables with validation
+    - Supports both key-based project references and direct project IDs
+    - Includes creator and user role assignment configurations
+    - Environment type name and status validation rules
+  - `modules/dev_center_project_environment_type/output.tf`: Comprehensive outputs including ID, name, project reference, deployment target, status, and provisioning state
+  - `modules/dev_center_project_environment_type/README.md`: Complete documentation with usage examples, input/output reference, and Azure API documentation links
+  - `dev_center_project_environment_types.tf`: Root-level orchestration with dependency management
+  - `examples/dev_center_project_environment_type/configuration.tfvars`: Working example with basic and advanced role assignment scenarios
+  - `tests/unit/dev_center_project_environment_type/project_environment_type_test.tftest.hcl`: Comprehensive unit tests with provider mocking
+- **Files Modified**:
+  - `variables.tf`: Added `dev_center_project_environment_types` variable with validation ensuring either project key reference or direct project ID is specified
+  - `docs/file_structure.md`: Added documentation for new root orchestration file
+- **Purpose**: Links environment types to specific projects within Azure Dev Centers, enabling granular environment management and role-based access control at the project level
+
+## Previous Changes (July 28, 2025)
 
 ### Dev Center Network Connection Module - AzAPI Migration
 - **Updated**: Migrated `dev_center_network_connection` module from azurerm to azapi provider

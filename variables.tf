@@ -360,3 +360,42 @@ variable "dev_center_project_pool_schedules" {
   }))
   default = {}
 }
+
+variable "dev_center_project_environment_types" {
+  description = "Dev Center Project Environment Types configuration objects"
+  type = map(object({
+    name = string
+    
+    # Project reference (use either key reference or direct ID)
+    project = optional(object({
+      key = string
+    }))
+    dev_center_project_id = optional(string)
+    
+    # Deployment target ID (required)
+    deployment_target_id = string
+    
+    # Configuration options
+    status = optional(string, "Enabled")
+    tags   = optional(map(string), {})
+    
+    # Role assignment configurations
+    creator_role_assignment = optional(object({
+      roles = list(string)
+    }))
+    
+    user_role_assignments = optional(map(object({
+      roles = list(string)
+    })), {})
+  }))
+  default = {}
+  
+  validation {
+    condition = alltrue([
+      for k, v in var.dev_center_project_environment_types : 
+      (v.project != null && v.dev_center_project_id == null) || 
+      (v.project == null && v.dev_center_project_id != null)
+    ])
+    error_message = "Each project environment type must specify either 'project.key' OR 'dev_center_project_id', but not both."
+  }
+}

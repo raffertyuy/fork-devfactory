@@ -52,6 +52,7 @@ This section contains specific files/callouts. If the file is not explained here
 - **dev_center_network_connections.tf**: Establishes network connectivity between Dev Centers and virtual networks.
 - **dev_center_project_pools.tf**: Manages pools of development resources within projects.
 - **dev_center_project_pool_schedules.tf**: Configures scheduling for automated pool management and cost optimization.
+- **dev_center_project_environment_types.tf**: Links environment types to specific projects within Dev Centers for granular environment management.
 
 ### docs/
 

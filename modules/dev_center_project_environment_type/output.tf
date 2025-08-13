@@ -1,0 +1,29 @@
+output "id" {
+  description = "The ID of the Dev Center Project Environment Type"
+  value       = azapi_resource.project_environment_type.id
+}
+
+output "name" {
+  description = "The name of the Dev Center Project Environment Type"
+  value       = azapi_resource.project_environment_type.name
+}
+
+output "project_id" {
+  description = "The ID of the parent Dev Center Project"
+  value       = var.dev_center_project_id
+}
+
+output "deployment_target_id" {
+  description = "The ID of the deployment target"
+  value       = var.deployment_target_id
+}
+
+output "status" {
+  description = "The status of the Project Environment Type"
+  value       = try(azapi_resource.project_environment_type.output.properties.status, null)
+}
+
+output "provisioning_state" {
+  description = "The provisioning state of the Project Environment Type"
+  value       = try(azapi_resource.project_environment_type.output.properties.provisioningState, null)
+}
