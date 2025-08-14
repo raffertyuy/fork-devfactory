@@ -115,7 +115,7 @@ The module will follow DevFactory patterns and use AzAPI provider v2.4.0 with th
     }
     ```
 
-- [ ] **Step 6: Update Integration Tests**
+- [x] **Step 6: Update Integration Tests**
   - **Task**: Update existing integration tests to validate project environment type functionality and relationships
   - **Files**:
     - `tests/integration/dev_center_integration_test.tftest.hcl`: Include project environment type creation and relationship validation
@@ -129,7 +129,7 @@ The module will follow DevFactory patterns and use AzAPI provider v2.4.0 with th
   - **Dependencies**: Existing task configuration patterns
   - **Pseudocode**: Add input picker for project environment type example selection
 
-- [ ] **Step 8: Update Documentation**
+- [x] **Step 8: Update Documentation**
   - **Task**: Update project documentation to include project environment type module information
   - **Files**:
     - `docs/file_structure.md`: Update with project environment type module and example locations

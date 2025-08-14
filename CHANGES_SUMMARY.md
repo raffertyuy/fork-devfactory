@@ -4,7 +4,36 @@
 
 This document summarizes the updates made to the Azure DevCenter module to implement the 2025-04-01-preview API version and fix the identity block placement.
 
-## Latest Changes (July 28, 2025)
+## Latest Changes (August 14, 2025)
+
+### Dev Center Project Environment Type Module - New Implementation
+- **Added**: New `dev_center_project_environment_type` module for associating environment types with Dev Center projects
+- **Classification**: Feature
+- **Breaking Change**: NO - This is a new module that doesn't affect existing functionality
+- **Files Added**:
+  - `modules/dev_center_project_environment_type/module.tf`: Main module implementation using azapi provider
+  - `modules/dev_center_project_environment_type/variables.tf`: Strong typing with comprehensive validation
+  - `modules/dev_center_project_environment_type/output.tf`: Output definitions for project environment type properties
+  - `modules/dev_center_project_environment_type/README.md`: Complete documentation with usage examples
+  - `dev_center_project_environment_types.tf`: Root orchestration file
+  - `variables.tf`: Added new variable definition with validation rules
+  - `examples/dev_center_project_environment_type/simple_case/configuration.tfvars`: Basic example
+  - `examples/dev_center_project_environment_type/enhanced_case/configuration.tfvars`: Advanced example with user role assignments
+  - `tests/unit/dev_center_project_environment_type/project_environment_type_test.tftest.hcl`: Unit tests with provider mocking
+- **Files Modified**:
+  - `tests/integration/dev_center_integration_test.tftest.hcl`: Added project environment type integration test
+  - `.vscode/tasks.json`: Added new example options for VS Code development workflow
+  - `docs/file_structure.md`: Updated with new module and example locations
+  - `docs/module_guide.md`: Enhanced with comprehensive usage patterns and configuration options
+- **Features**:
+  - Associates environment types with Dev Center projects using Azure DevCenter 2025-04-01-preview API
+  - Configurable status (Enabled/Disabled) for project environment types
+  - User role assignments for granular access control
+  - Comprehensive validation for all input variables
+  - Full test coverage with both unit and integration tests
+  - Complete documentation and examples
+
+## Previous Changes (July 28, 2025)
 
 ### Dev Center Network Connection Module - AzAPI Migration
 - **Updated**: Migrated `dev_center_network_connection` module from azurerm to azapi provider
