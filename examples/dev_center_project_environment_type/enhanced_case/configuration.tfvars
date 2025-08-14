@@ -110,14 +110,6 @@ dev_center_project_environment_types = {
       key = "development"
     }
     status = "Enabled"
-    user_role_assignments = {
-      "platform-team@contoso.com" = {
-        roles = ["DevCenter Project Admin", "Deployment Environments User"]
-      }
-      "developers@contoso.com" = {
-        roles = ["Deployment Environments User"]
-      }
-    }
     tags = {
       environment = "production"
       purpose     = "project-environment-association"
@@ -133,14 +125,6 @@ dev_center_project_environment_types = {
       key = "staging"
     }
     status = "Enabled"
-    user_role_assignments = {
-      "platform-team@contoso.com" = {
-        roles = ["DevCenter Project Admin", "Deployment Environments User"]
-      }
-      "qa-team@contoso.com" = {
-        roles = ["Deployment Environments User"]
-      }
-    }
     tags = {
       environment = "production"
       purpose     = "project-environment-association"
@@ -156,14 +140,6 @@ dev_center_project_environment_types = {
       key = "production"
     }
     status = "Enabled"
-    user_role_assignments = {
-      "platform-team@contoso.com" = {
-        roles = ["DevCenter Project Admin", "Deployment Environments User"]
-      }
-      "ops-team@contoso.com" = {
-        roles = ["Deployment Environments User"]
-      }
-    }
     tags = {
       environment = "production"
       purpose     = "project-environment-association"
@@ -179,11 +155,6 @@ dev_center_project_environment_types = {
       key = "development"
     }
     status = "Enabled"
-    user_role_assignments = {
-      "app-team@contoso.com" = {
-        roles = ["DevCenter Project Admin", "Deployment Environments User"]
-      }
-    }
     tags = {
       environment = "production"
       purpose     = "project-environment-association"

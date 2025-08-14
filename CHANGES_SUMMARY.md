@@ -6,6 +6,36 @@ This document summarizes the updates made to the Azure DevCenter module to imple
 
 ## Latest Changes (August 14, 2025)
 
+### Dev Center Project Environment Type Module - API Schema Compliance Fix
+
+- **Fixed**: Resolved Azure API schema validation errors in dev_center_project_environment_type module for userRoleAssignments
+- **Classification**: Bug fix
+- **Breaking Change**: YES - User role assignments schema changed to match Azure API requirements
+- **Issue**: userRoleAssignments.roles was defined as list(string) but Azure API expects map(object({}))
+- **Root Cause**: Mismatch between Terraform variable schema and Azure DevCenter REST API schema
+- **Azure API Requirement**:
+  - userRoleAssignments keys must be user object IDs (GUIDs), not email addresses
+  - roles property must be a map where keys are role definition IDs (GUIDs) and values are objects
+- **Solution Applied**:
+  - Updated module variable schema: `roles = list(string)` → `roles = map(object({}))`
+  - Updated root variable schema in `variables.tf` to match module requirements
+  - Updated all example configurations to use correct API format
+  - Updated test files to use proper schema structure
+  - Enhanced README documentation with Azure CLI commands to find required IDs
+- **Files Modified**:
+  - `modules/dev_center_project_environment_type/variables.tf`: Fixed roles type definition
+  - `modules/dev_center_project_environment_type/README.md`: Added comprehensive documentation for finding user object IDs and role definition IDs
+  - `variables.tf`: Updated root variable definition to match module schema
+  - `tests/unit/dev_center_project_environment_type/project_environment_type_test.tftest.hcl`: Updated test to use correct schema
+  - `examples/dev_center_project_environment_type/enhanced_case/configuration.tfvars`: Updated all user role assignments to use object IDs and role definition IDs
+- **Migration Required**:
+  - Users must update configurations to use Azure AD user object IDs instead of email addresses
+  - Users must use role definition IDs (GUIDs) instead of role names
+  - Use `az ad user show --id user@domain.com --query id -o tsv` to get user object IDs
+  - Use `az role definition list --name "Role Name" --query '[].id' -o tsv` to get role definition IDs
+- **Validation**: All unit and integration tests pass (43 total test cases)
+- **API Reference**: Based on Azure DevCenter REST API documentation (2025-04-01-preview)
+
 ### Dev Center Project Environment Type Module - Critical Fix Applied
 
 - **Fixed**: Resolved API validation errors in dev_center_project_environment_type module

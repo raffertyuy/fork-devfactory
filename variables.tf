@@ -375,7 +375,7 @@ variable "dev_center_project_environment_types" {
     deployment_target_id  = optional(string)
     status                = optional(string, "Enabled")
     user_role_assignments = optional(map(object({
-      roles = list(string)
+      roles = map(object({}))
     })))
     tags = optional(map(string), {})
   }))

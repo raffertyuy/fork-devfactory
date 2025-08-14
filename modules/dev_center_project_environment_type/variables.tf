@@ -34,7 +34,7 @@ variable "project_environment_type" {
   type = object({
     status = optional(string, "Enabled")
     user_role_assignments = optional(map(object({
-      roles = list(string)
+      roles = map(object({}))
     })))
     tags = optional(map(string))
   })
