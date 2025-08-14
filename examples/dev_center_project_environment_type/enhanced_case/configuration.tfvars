@@ -11,7 +11,7 @@ global_settings = {
 
 resource_groups = {
   rg1 = {
-    name   = "rg-devcenter-prod"
+    name   = "devcenter-prod"
     region = "eastus"
     tags = {
       environment = "production"
@@ -209,10 +209,10 @@ dev_center_project_environment_types = {
 }
 
 # Empty variables required by the root module
-dev_center_galleries                 = {}
-dev_center_dev_box_definitions       = {}
-dev_center_network_connections       = {}
-dev_center_catalogs                  = {}
-dev_center_project_pools             = {}
-dev_center_project_pool_schedules    = {}
-shared_image_galleries               = {}
+dev_center_galleries              = {}
+dev_center_dev_box_definitions    = {}
+dev_center_network_connections    = {}
+dev_center_catalogs               = {}
+dev_center_project_pools          = {}
+dev_center_project_pool_schedules = {}
+shared_image_galleries            = {}

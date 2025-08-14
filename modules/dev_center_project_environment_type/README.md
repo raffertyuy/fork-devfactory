@@ -26,7 +26,6 @@ module "dev_center_project_environment_type" {
   }
 
   dev_center_project_id = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/rg-example/providers/Microsoft.DevCenter/projects/project-example"
-  deployment_target_id  = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/rg-example/providers/Microsoft.DevCenter/devcenters/dc-example/environmentTypes/development"
 }
 ```
 
@@ -61,7 +60,6 @@ module "dev_center_project_environment_type" {
   }
 
   dev_center_project_id = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/rg-example/providers/Microsoft.DevCenter/projects/project-example"
-  deployment_target_id  = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/rg-example/providers/Microsoft.DevCenter/devcenters/dc-example/environmentTypes/production"
 }
 ```
 
@@ -119,6 +117,7 @@ No modules.
 ## Features
 
 - Associates environment types with Dev Center projects
+- Automatically uses current subscription as deployment target
 - Configurable status (Enabled/Disabled)
 - User role assignments for granular access control
 - Comprehensive validation for inputs
@@ -130,11 +129,11 @@ No modules.
 - Project environment type name must be 3-128 characters, alphanumeric with hyphens, underscores, and periods
 - Status must be either "Enabled" or "Disabled"
 - Dev Center Project ID must be a valid resource ID format
-- Deployment target ID must be a valid environment type resource ID format
+- Deployment target is automatically set to current subscription
 
 ## Security Considerations
 
 - Use least privilege access for role assignments
 - Consider using Azure AD groups instead of individual users for role assignments
-- Ensure deployment targets have appropriate permissions for the target environments
+- Environment resources will be deployed to the current subscription
 - Review and audit user role assignments regularly

@@ -6,7 +6,32 @@ This document summarizes the updates made to the Azure DevCenter module to imple
 
 ## Latest Changes (August 14, 2025)
 
+### Dev Center Project Environment Type Module - Critical Fix Applied
+
+- **Fixed**: Resolved API validation errors in dev_center_project_environment_type module
+- **Classification**: Bug fix
+- **Breaking Change**: NO - Module interface updated but functionality preserved
+- **Issue**: DeploymentTargetId was incorrectly using full environment type resource ID instead of subscription ID
+- **Root Cause**: Azure DevCenter API requires deploymentTargetId to be subscription ID format `/subscriptions/{guid}`, not full resource ID
+- **Solution Applied**:
+  - Updated `deploymentTargetId` to use subscription ID: `/subscriptions/${data.azapi_client_config.current.subscription_id}`
+  - Fixed environment type name matching to use actual created environment type names
+  - Removed unnecessary azurecaf_name resource for project environment types
+  - Updated module to reference environment type names from parent Dev Center
+- **Files Modified**:
+  - `modules/dev_center_project_environment_type/module.tf`: Fixed deploymentTargetId and name logic
+  - `modules/dev_center_project_environment_type/variables.tf`: Added environment_type_name variable, updated validation
+  - `modules/dev_center_project_environment_type/output.tf`: Updated deployment_target_id output description
+  - `modules/dev_center_project_environment_type/README.md`: Updated usage examples and documentation
+  - `dev_center_project_environment_types.tf`: Updated module call to pass environment_type_name
+- **Validation**: Successfully applied simple case configuration with both development and staging project environment types
+- **API Reference**: Based on official Azure DevCenter REST API documentation (2025-04-01-preview)
+- **Resources Created**:
+  - `/subscriptions/.../projects/.../environmentTypes/demo-dcet-development-qgi` (Enabled)
+  - `/subscriptions/.../projects/.../environmentTypes/demo-dcet-staging-iuo` (Enabled)
+
 ### Dev Center Project Environment Type Module - New Implementation
+
 - **Added**: New `dev_center_project_environment_type` module for associating environment types with Dev Center projects
 - **Classification**: Feature
 - **Breaking Change**: NO - This is a new module that doesn't affect existing functionality

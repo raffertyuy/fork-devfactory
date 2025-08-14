@@ -19,31 +19,25 @@ variable "dev_center_project_id" {
   }
 }
 
-variable "deployment_target_id" {
-  description = "The ID of the deployment target for this project environment type"
+variable "environment_type_name" {
+  description = "The name of the environment type (must match an existing environment type in the Dev Center)"
   type        = string
 
   validation {
-    condition     = can(regex("^/subscriptions/[0-9a-f-]+/resourceGroups/[^/]+/providers/Microsoft\\.DevCenter/devcenters/[^/]+/environmentTypes/[^/]+$", var.deployment_target_id))
-    error_message = "Deployment target ID must be a valid Azure resource ID for a Dev Center Environment Type."
+    condition     = can(regex("^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]$", var.environment_type_name)) && length(var.environment_type_name) >= 3 && length(var.environment_type_name) <= 128
+    error_message = "Environment type name must be between 3 and 128 characters long and can contain alphanumeric characters, periods, hyphens, and underscores. It must start and end with an alphanumeric character."
   }
 }
 
 variable "project_environment_type" {
   description = "Configuration object for the Dev Center Project Environment Type"
   type = object({
-    name   = string
     status = optional(string, "Enabled")
     user_role_assignments = optional(map(object({
       roles = list(string)
     })))
     tags = optional(map(string))
   })
-
-  validation {
-    condition     = can(regex("^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]$", var.project_environment_type.name)) && length(var.project_environment_type.name) >= 3 && length(var.project_environment_type.name) <= 128
-    error_message = "Project environment type name must be between 3 and 128 characters long and can contain alphanumeric characters, periods, hyphens, and underscores. It must start and end with an alphanumeric character."
-  }
 
   validation {
     condition     = var.project_environment_type.status == null || contains(["Enabled", "Disabled"], var.project_environment_type.status)

@@ -14,8 +14,8 @@ output "dev_center_project_id" {
 }
 
 output "deployment_target_id" {
-  description = "The deployment target ID for the project environment type"
-  value       = var.deployment_target_id
+  description = "The deployment target ID for the project environment type (subscription ID)"
+  value       = local.subscription_id
 }
 
 output "status" {

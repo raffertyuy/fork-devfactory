@@ -12,33 +12,30 @@ terraform {
   }
 }
 
+data "azapi_client_config" "current" {}
+
 locals {
   tags = merge(
     try(var.global_settings.tags, {}),
     try(var.project_environment_type.tags, {})
   )
-}
 
-# Using resource instead of data source to ensure stable naming across plan/apply
-resource "azurecaf_name" "project_environment_type" {
-  name          = var.project_environment_type.name
-  resource_type = "azurerm_dev_center_project_environment_type"
-  prefixes      = var.global_settings.prefixes
-  random_length = var.global_settings.random_length
-  clean_input   = true
-  passthrough   = var.global_settings.passthrough
-  use_slug      = var.global_settings.use_slug
+  # Extract subscription ID for deploymentTargetId
+  # The deploymentTargetId should be the subscription ID, not the full environment type resource ID
+  subscription_id = "/subscriptions/${data.azapi_client_config.current.subscription_id}"
 }
 
 resource "azapi_resource" "dev_center_project_environment_type" {
   type      = "Microsoft.DevCenter/projects/environmentTypes@2025-04-01-preview"
-  name      = azurecaf_name.project_environment_type.result
+  name      = var.environment_type_name
   parent_id = var.dev_center_project_id
 
   body = {
     properties = merge(
       {
-        deploymentTargetId = var.deployment_target_id
+        # The deploymentTargetId should be the subscription ID, not the environment type resource ID
+        # This specifies the subscription where environment resources will be deployed
+        deploymentTargetId = local.subscription_id
       },
       try(var.project_environment_type.status, null) != null ? {
         status = var.project_environment_type.status
