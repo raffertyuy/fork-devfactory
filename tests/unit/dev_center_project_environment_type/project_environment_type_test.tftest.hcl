@@ -99,8 +99,10 @@ variables {
       }
       status = "Enabled"
       user_role_assignments = {
-        "test-user@contoso.com" = {
-          roles = ["DevCenter Project Admin", "Deployment Environments User"]
+        "e45e3m7c-176e-416a-b466-0c5ec8298f8a" = {
+          roles = {
+            "4cbf0b6c-e750-441c-98a7-10da8387e4d6" = {}
+          }
         }
       }
       tags = {
